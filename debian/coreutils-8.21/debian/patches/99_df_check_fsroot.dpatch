@@ -1,0 +1,541 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 99_mountinfo.dpatch by  <ubuntu@wily-df.canonistack>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Make df prioritize fileystem root mounts over bind mounts
+## DP: Pulled in enablement for /proc/self/mountinfo in order to succeed in above
+## DP: Please see pad.lv/1432871 for more info
+## 
+## Bug-Ubuntu: http://pad.lv/1432871
+## Auther: Dave Chiluk <chiluk@canonical.com>
+## Origin: upstream, coreutils - http://git.savannah.gnu.org/gitweb/?p=coreutils.git
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=616fa9c7b335117243c0c157a6c45445e20fdfa0
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=3ebc58cc4370567be7301e02b661a2fe5478d86c
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=2dc5d044a88fd64e11e35886e78b54a4a9fc2b23
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=9d736f8dbfef2b33d431dccf852dace9cfc84d59
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=25a2c948b24163ce0e0e9e52f6a5fef33d7d7842
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=1b1c40e1d6f8cf30b6c7c9d31bbddbc3d5cc72e6
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=2e81e62243409c5c574b899f52b08c000e4d99fd
+## commit: http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=3babaf83875ceac896c8dd3a64248e955dfecef9
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/NEWS coreutils-8.21/NEWS
+--- coreutils-8.21~/NEWS	2013-02-14 09:52:18.000000000 -0600
++++ coreutils-8.21/NEWS	2015-12-03 10:24:36.000000000 -0600
+@@ -82,6 +82,9 @@
+   nl no longer supports the --page-increment option, which has been
+   deprecated since coreutils-7.5.  Use --line-increment instead.
+ 
++  df now prefers sources towards the root of a device when
++  eliding duplicate bind mounted entries.
++
+ ** Improvements
+ 
+   readlink now supports multiple arguments, and a complementary
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/init.cfg coreutils-8.21/init.cfg
+--- coreutils-8.21~/init.cfg	2013-01-30 18:46:24.000000000 -0600
++++ coreutils-8.21/init.cfg	2015-12-03 10:24:36.000000000 -0600
+@@ -79,7 +79,7 @@
+ require_mount_list_()
+ {
+   local mount_list_fail='cannot read table of mounted file systems'
+-  df 2>&1 | grep -F "$mount_list_fail" >/dev/null &&
++  df --local 2>&1 | grep -F "$mount_list_fail" >/dev/null &&
+     skip_ "$mount_list_fail"
+ }
+ 
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/src/df.c coreutils-8.21/src/df.c
+--- coreutils-8.21~/src/df.c	2013-02-04 17:40:31.000000000 -0600
++++ coreutils-8.21/src/df.c	2015-12-03 10:24:36.000000000 -0600
+@@ -45,12 +45,12 @@
+ 
+ /* Filled with device numbers of examined file systems to avoid
+    duplicities in output.  */
+-struct devlist
++static struct devlist
+ {
+   dev_t dev_num;
+   struct mount_entry *me;
+   struct devlist *next;
+-};
++} *device_list;
+ 
+ /* If true, show even file systems with zero size or
+    uninteresting types.  */
+@@ -287,7 +287,7 @@
+ alloc_table_row (void)
+ {
+   nrows++;
+-  table = xnrealloc (table, nrows, sizeof (char *));
++  table = xnrealloc (table, nrows, sizeof (char **));
+   table[nrows - 1] = xnmalloc (ncolumns, sizeof (char *));
+ }
+ 
+@@ -539,7 +539,7 @@
+           char *num = human_readable (output_block_size, buf, opts, 1, 1);
+ 
+           /* Reset the header back to the default in OUTPUT_MODE.  */
+-          header = N_("blocks");
++          header = _("blocks");
+ 
+           /* TRANSLATORS: this is the "1K-blocks" header in "df" output.  */
+           if (asprintf (&cell, _("%s-%s"), num, header) == -1)
+@@ -599,75 +599,139 @@
+ }
+ 
+ /* Filter mount list by skipping duplicate entries.
+-   In the case of duplicities - based on to the device number - the mount entry
++   In the case of duplicities - based on the device number - the mount entry
+    with a '/' in its me_devname (i.e. not pseudo name like tmpfs) wins.
+    If both have a real devname (e.g. bind mounts), then that with the shorter
+-   me_mountdir wins.  */
++   me_mountdir wins.  With DEVICES_ONLY == true (set with df -a), only update
++   the global device_list, rather than filtering the global mount_list.  */
+ 
+ static void
+-filter_mount_list (void)
++filter_mount_list (bool devices_only)
+ {
+   struct mount_entry *me;
+ 
+-  /* Store of already-processed device numbers.  */
+-  struct devlist *devlist_head = NULL;
+-
+-  /* Sort all 'wanted' entries into the list devlist_head.  */
+-  for (me = mount_list; me; me = me->me_next)
++  /* Sort all 'wanted' entries into the list device_list.  */
++  for (me = mount_list; me;)
+     {
+       struct stat buf;
+       struct devlist *devlist;
++      struct mount_entry *discard_me = NULL;
+ 
+-      if (-1 == stat (me->me_mountdir, &buf))
++      /* Avoid stating remote file systems as that may hang.
++         TODO: On Linux we might avoid this stat() and another in get_dev()
++         by using the device IDs available from /proc/self/mountinfo.
++         read_file_system_list() could populate me_dev from those
++         for efficiency and accuracy.  */
++      if ((me->me_remote && show_local_fs)
++          || -1 == stat (me->me_mountdir, &buf))
+         {
+-          ;  /* Stat failed - add ME to be able to complain about it later.  */
++          /* If remote, and showing just local, add ME for filtering later.
++             If stat failed; add ME to be able to complain about it later.  */
++          buf.st_dev = me->me_dev;
+         }
+       else
+         {
+-          /* If the device name is a real path name ...  */
+-          if (strchr (me->me_devname, '/'))
+-            {
+-              /* ... try to find its device number in the devlist.  */
+-              for (devlist = devlist_head; devlist; devlist = devlist->next)
+-                if (devlist->dev_num == buf.st_dev)
+-                  break;
++          /* If we've already seen this device...  */
++          for (devlist = device_list; devlist; devlist = devlist->next)
++            if (devlist->dev_num == buf.st_dev)
++              break;
+ 
+-              if (devlist)
++          if (devlist)
++            {
++              bool target_nearer_root = strlen (devlist->me->me_mountdir)
++                                        > strlen (me->me_mountdir);
++              /* With bind mounts, prefer items nearer the root of the source */
++              bool source_below_root = devlist->me->me_mntroot != NULL
++                                       && me->me_mntroot != NULL
++                                       && (strlen (devlist->me->me_mntroot)
++                                           < strlen (me->me_mntroot));
++              if (! print_grand_total && me->me_remote && devlist->me->me_remote
++                  && ! STREQ (devlist->me->me_devname, me->me_devname))
+                 {
+-                  /* Let the shorter mountdir win.  */
+-                  if (   !strchr (devlist->me->me_devname, '/')
+-                      || ( strlen (devlist->me->me_mountdir)
+-                         > strlen (me->me_mountdir)))
+-                    {
+-                       /* FIXME: free ME - the others are also not free()d.  */
+-                      devlist->me = me;
+-                    }
+-                  continue; /* ... with the loop over the mount_list.  */
++                  /* Don't discard remote entries with different locations,
++                     as these are more likely to be explicitly mounted.
++                     However avoid this when producing a total to give
++                     a more accurate value in that case.  */
+                 }
++              else if ((strchr (me->me_devname, '/')
++                       /* let "real" devices with '/' in the name win.  */
++                        && ! strchr (devlist->me->me_devname, '/'))
++                       /* let points towards the root of the device win.  */
++                       || (target_nearer_root && ! source_below_root)
++                       /* let an entry overmounted on a new device win...  */
++                       || (! STREQ (devlist->me->me_devname, me->me_devname)
++                           /* ... but only when matching an existing mnt point,
++                              to avoid problematic replacement when given
++                              inaccurate mount lists, seen with some chroot
++                              environments for example.  */
++                           && STREQ (me->me_mountdir,
++                                     devlist->me->me_mountdir)))
++                {
++                  /* Discard mount entry for existing device.  */
++                  discard_me = devlist->me;
++                  devlist->me = me;
++                }
++              else
++                {
++                  /* Discard mount entry currently being processed.  */
++                  discard_me = me;
++                }
++
+             }
+         }
+ 
+-      /* Add the device number to the global list devlist.  */
+-      devlist = xmalloc (sizeof *devlist);
+-      devlist->me = me;
+-      devlist->dev_num = buf.st_dev;
+-      devlist->next = devlist_head;
+-      devlist_head = devlist;
++      if (discard_me)
++        {
++          me = me->me_next;
++          if (! devices_only)
++            free_mount_entry (discard_me);
++        }
++      else
++        {
++          /* Add the device number to the global list devlist.  */
++          devlist = xmalloc (sizeof *devlist);
++          devlist->me = me;
++          devlist->dev_num = buf.st_dev;
++          devlist->next = device_list;
++          device_list = devlist;
++
++          me = me->me_next;
++        }
+     }
+ 
+   /* Finally rebuild the mount_list from the devlist.  */
+-  mount_list = NULL;
+-  while (devlist_head)
++  if (! devices_only) {
++    mount_list = NULL;
++    while (device_list)
++      {
++        /* Add the mount entry.  */
++        me = device_list->me;
++        me->me_next = mount_list;
++        mount_list = me;
++        /* Free devlist entry and advance.  */
++        struct devlist *devlist = device_list->next;
++        free (device_list);
++        device_list = devlist;
++      }
++  }
++}
++
++/* Search a mount entry list for device id DEV.
++   Return the corresponding device name if found or NULL if not.  */
++
++static char const * _GL_ATTRIBUTE_PURE
++devname_for_dev (dev_t dev)
++{
++  struct devlist *dl = device_list;
++
++  while (dl)
+     {
+-      /* Add the mount entry.  */
+-      me = devlist_head->me;
+-      me->me_next = mount_list;
+-      mount_list = me;
+-      /* Free devlist entry and advance.  */
+-      struct devlist *devlist = devlist_head->next;
+-      free (devlist_head);
+-      devlist_head = devlist;
++      if (dl->dev_num == dev)
++        return dl->me->me_devname;
++      dl = dl->next;
+     }
++
++  return NULL;
+ }
+ 
+ /* Return true if N is a known integer value.  On many file systems,
+@@ -851,9 +915,40 @@
+     fsu = *force_fsu;
+   else if (get_fs_usage (stat_file, disk, &fsu))
+     {
+-      error (0, errno, "%s", quote (stat_file));
+-      exit_status = EXIT_FAILURE;
+-      return;
++      /* If we can't access a system provided entry due
++         to it not being present (now), or due to permissions,
++         just output placeholder values rather than failing.  */
++      if (process_all && (errno == EACCES || errno == ENOENT))
++        {
++          if (! show_all_fs)
++            return;
++
++          fstype = "-";
++          fsu.fsu_blocksize = fsu.fsu_blocks = fsu.fsu_bfree =
++          fsu.fsu_bavail = fsu.fsu_files = fsu.fsu_ffree = UINTMAX_MAX;
++        }
++      else
++        {
++          error (0, errno, "%s", quote (stat_file));
++          exit_status = EXIT_FAILURE;
++          return;
++        }
++    }
++  else if (process_all && show_all_fs)
++    {
++      /* Ensure we don't output incorrect stats for over-mounted directories.
++         Discard stats when the device name doesn't match.  */
++      struct stat sb;
++      if (stat (stat_file, &sb) == 0)
++        {
++          char const * devname = devname_for_dev (sb.st_dev);
++          if (devname && ! STREQ (devname, disk))
++            {
++              fstype = "-";
++              fsu.fsu_blocksize = fsu.fsu_blocks = fsu.fsu_bfree =
++              fsu.fsu_bavail = fsu.fsu_files = fsu.fsu_ffree = UINTMAX_MAX;
++            }
++        }
+     }
+ 
+   if (fsu.fsu_blocks == 0 && !show_all_fs && !show_listed_fs)
+@@ -1165,8 +1260,7 @@
+ {
+   struct mount_entry *me;
+ 
+-  if (!show_all_fs)
+-    filter_mount_list ();
++  filter_mount_list (show_all_fs);
+ 
+   for (me = mount_list; me; me = me->me_next)
+     get_dev (me->me_devname, me->me_mountdir, NULL, me->me_type,
+@@ -1219,7 +1313,6 @@
+   -B, --block-size=SIZE  scale sizes by SIZE before printing them.  E.g.,\n\
+                            '-BM' prints sizes in units of 1,048,576 bytes.\n\
+                            See SIZE format below.\n\
+-      --total           produce a grand total\n\
+   -h, --human-readable  print sizes in human readable format (e.g., 1K 234M 2G)\
+ \n\
+   -H, --si              likewise, but use powers of 1000 not 1024\n\
+@@ -1236,6 +1329,12 @@
+                                or print all fields if FIELD_LIST is omitted.\n\
+   -P, --portability     use the POSIX output format\n\
+       --sync            invoke sync before getting usage info\n\
++"), stdout);
++      fputs (_("\
++      --total           elide all entries insignificant to available space,\n\
++                          and produce a grand total\n\
++"), stdout);
++      fputs (_("\
+   -t, --type=TYPE       limit listing to file systems of type TYPE\n\
+   -T, --print-type      print file system type\n\
+   -x, --exclude-type=TYPE   limit listing to file systems not of type TYPE\n\
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/tests/df/no-mtab-status.sh coreutils-8.21/tests/df/no-mtab-status.sh
+--- coreutils-8.21~/tests/df/no-mtab-status.sh	2013-01-30 18:46:24.000000000 -0600
++++ coreutils-8.21/tests/df/no-mtab-status.sh	2015-12-03 10:24:36.000000000 -0600
+@@ -20,7 +20,8 @@
+ . "${srcdir=.}/tests/init.sh"; path_prepend_ ./src
+ print_ver_ df
+ 
+-df || skip_ "df fails"
++# Protect against inaccessible remote mounts etc.
++timeout 10 df || skip_ "df fails"
+ 
+ # Simulate "mtab" failure.
+ cat > k.c <<'EOF' || framework_failure_
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/tests/df/skip-duplicates.sh coreutils-8.21/tests/df/skip-duplicates.sh
+--- coreutils-8.21~/tests/df/skip-duplicates.sh	2013-01-30 18:46:24.000000000 -0600
++++ coreutils-8.21/tests/df/skip-duplicates.sh	2015-12-03 10:24:36.000000000 -0600
+@@ -20,38 +20,67 @@
+ . "${srcdir=.}/tests/init.sh"; path_prepend_ ./src
+ print_ver_ df
+ 
+-df || skip_ "df fails"
++# We use --local here so as to not activate
++# potentially very many remote mounts.
++df --local || skip_ "df fails"
+ 
+-# Simulate an mtab file with two entries of the same device number.
++export CU_NONROOT_FS=$(df --local --output=target 2>&1 | grep /. | head -n1)
++export CU_REMOTE_FS=$(df --local --output=target 2>&1 | grep /. |
++                      tail -n+2 | head -n1)
++
++unique_entries=1
++test -z "$CU_NONROOT_FS" || unique_entries=$(expr $unique_entries + 1)
++test -z "$CU_REMOTE_FS" || unique_entries=$(expr $unique_entries + 2)
++
++# Simulate an mtab file to test various cases.
+ cat > k.c <<'EOF' || framework_failure_
+ #include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ #include <mntent.h>
+ 
++#define STREQ(a, b) (strcmp (a, b) == 0)
++
+ struct mntent *getmntent (FILE *fp)
+ {
++  static char *nonroot_fs;
++  static char *remote_fs;
++  static int done;
++
+   /* Prove that LD_PRELOAD works. */
+-  static int done = 0;
+   if (!done)
+     {
+       fclose (fopen ("x", "w"));
+       ++done;
+     }
+ 
+-  static struct mntent mntent;
++  static struct mntent mntents[] = {
++    {.mnt_fsname="/short",  .mnt_dir="/invalid/mount/dir"},
++    {.mnt_fsname="fsname",  .mnt_dir="/",},
++    {.mnt_fsname="/fsname", .mnt_dir="/."},
++    {.mnt_fsname="/fsname", .mnt_dir="/"},
++    {.mnt_fsname="virtfs",  .mnt_dir="/NONROOT"},
++    {.mnt_fsname="virtfs2", .mnt_dir="/NONROOT"},
++  };
+ 
+-  while (done++ < 4)
++  if (done == 1)
+     {
+-      /* File system - Mounted on
+-         fsname       /
+-         /fsname      /root
+-         /fsname      /
+-      */
+-      mntent.mnt_fsname = (done == 2) ? "fsname" : "/fsname";
+-      mntent.mnt_dir = (done == 3) ? "/root" : "/";
+-      mntent.mnt_type = "-";
++      nonroot_fs = getenv ("CU_NONROOT_FS");
++      if (!nonroot_fs || !*nonroot_fs)
++        nonroot_fs = "/"; /* merge into / entries.  */
++    }
+ 
+-      return &mntent;
++  if (done == 1 && !getenv ("CU_TEST_DUPE_INVALID"))
++    done++;  /* skip the first entry.  */
++
++  while (done++ <= 6)
++    {
++      mntents[done-2].mnt_type = "-";
++      if (STREQ (mntents[done-2].mnt_dir, "/NONROOT"))
++        mntents[done-2].mnt_dir = nonroot_fs;
++      return &mntents[done-2];
+     }
++
+   return NULL;
+ }
+ EOF
+@@ -64,20 +93,38 @@
+ LD_PRELOAD=./k.so df
+ test -f x || skip_ "internal test failure: maybe LD_PRELOAD doesn't work?"
+ 
+-# The fake mtab file should only contain 2 entries, both
++# The fake mtab file should only contain entries
+ # having the same device number; thus the output should
+-# consist of a header and one entry.
++# consist of a header and unique entries.
+ LD_PRELOAD=./k.so df >out || fail=1
+-test $(wc -l <out) -eq 2 || { fail=1; cat out; }
++test $(wc -l <out) -eq $(expr 1 + $unique_entries) || { fail=1; cat out; }
++
++# With --total we should suppress the duplicate but separate remote file system
++LD_PRELOAD=./k.so df --total >out || fail=1
++test "$CU_REMOTE_FS" && elide_remote=1 || elide_remote=0
++test $(wc -l <out) -eq $(expr 2 + $unique_entries - $elide_remote) ||
++  { fail=1; cat out; }
++
++# Ensure we don't fail when unable to stat (currently) unavailable entries
++xLD_PRELOAD=./k.so CU_TEST_DUPE_INVALID=1 df -T >out || fail=1
++test $(wc -l <out) -eq $(expr 1 + $unique_entries) || { fail=1; cat out; }
+ 
+ # df should also prefer "/fsname" over "fsname"
+-test $(grep -c '/fsname' <out) -eq 1 || { fail=1; cat out; }
+-# ... and "/fsname" with '/' as Mounted on over '/root'
+-test $(grep -c '/root' <out) -eq 0 || { fail=1; cat out; }
++if test "$unique_entries" = 2; then
++  test $(grep -c '/fsname' <out) -eq 1 || { fail=1; cat out; }
++  # ... and "/fsname" with '/' as Mounted on over '/.'
++  test $(grep -cF '/.' <out) -eq 0 || { fail=1; cat out; }
++fi
++
++# df should use the last seen devname (mnt_fsname)
++test $(grep -c 'virtfs2' <out) -eq 1 || { fail=1; cat out; }
+ 
+ # Ensure that filtering duplicates does not affect -a processing.
+ LD_PRELOAD=./k.so df -a >out || fail=1
+-test $(wc -l <out) -eq 4 || { fail=1; cat out; }
++total_fs=6; test "$CU_REMOTE_FS" && total_fs=$(expr $total_fs + 3)
++test $(wc -l <out) -eq $total_fs || { fail=1; cat out; }
++# Ensure placeholder "-" values used for the eclipsed "virtfs"
++test $(grep -c 'virtfs *-' <out) -eq 1 || { fail=1; cat out; }
+ 
+ # Ensure that filtering duplicates does not affect
+ # argument processing (now without the fake getmntent()).
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/tests/df/skip-rootfs.sh coreutils-8.21/tests/df/skip-rootfs.sh
+--- coreutils-8.21~/tests/df/skip-rootfs.sh	2013-02-04 17:40:31.000000000 -0600
++++ coreutils-8.21/tests/df/skip-rootfs.sh	2015-12-03 10:24:36.000000000 -0600
+@@ -19,7 +19,8 @@
+ . "${srcdir=.}/tests/init.sh"; path_prepend_ ./src
+ print_ver_ df
+ 
+-df || skip_ "df fails"
++# Protect against inaccessible remote mounts etc.
++timeout 10 df || skip_ "df fails"
+ 
+ # Verify that rootfs is in mtab (and shown when the -a option is specified).
+ df -a >out || fail=1
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/tests/df/total-unprocessed.sh coreutils-8.21/tests/df/total-unprocessed.sh
+--- coreutils-8.21~/tests/df/total-unprocessed.sh	2013-01-30 18:46:24.000000000 -0600
++++ coreutils-8.21/tests/df/total-unprocessed.sh	2015-12-03 10:25:19.474020804 -0600
+@@ -2,7 +2,7 @@
+ # Ensure that df exits non-Zero and writes an error message when
+ # --total is used but no file system has been processed.
+ 
+-# Copyright (C) 2012-2013 Free Software Foundation, Inc.
++# Copyright (C) 2012-2014 Free Software Foundation, Inc.
+ 
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+@@ -25,11 +25,13 @@
+ df: no file systems processed
+ EOF
+ 
+-# The following simply finds no match for the combination
+-# of the options --local and FS-type nfs together with the
+-# argument ".". It must exit non-Zero nonetheless.
+-df --local -t nfs --total '.' 2>out && fail=1
+-compare exp out || fail=1
++# Check we exit with non-Zero.
++# Note we don't check when the file system can't be determined
++# as -t filtering is not applied in that case.
++if test "$(df --output=fstype . | tail -n1)" != '-'; then
++  df -t _non_existent_fstype_ --total . 2>out && fail=1
++  compare exp out || fail=1
++fi
+ 
+ cat <<\EOF > exp || framework_failure_
+ df: '_does_not_exist_': No such file or directory
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/tests/df/total-verify.sh coreutils-8.21/tests/df/total-verify.sh
+--- coreutils-8.21~/tests/df/total-verify.sh	2013-01-30 18:46:24.000000000 -0600
++++ coreutils-8.21/tests/df/total-verify.sh	2015-12-03 10:24:36.000000000 -0600
+@@ -20,7 +20,8 @@
+ print_ver_ df
+ require_perl_
+ 
+-df || skip_ "df fails"
++# Protect against inaccessible remote mounts etc.
++timeout 10 df || skip_ "df fails"
+ 
+ cat <<\EOF > check-df || framework_failure_
+ my ($total, $used, $avail) = (0, 0, 0);

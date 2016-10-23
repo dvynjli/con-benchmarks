@@ -1,0 +1,11 @@
+astrometry.net (0.46-0ubuntu2) trusty; urgency=medium
+
+  * debian/rules: Use dh_autotools-dev to update config.{sub,guess}
+
+ -- Adam Conrad <adconrad@ubuntu.com>  Sun, 16 Mar 2014 13:16:27 -0600
+
+astrometry.net (0.46-0ubuntu1) trusty; urgency=low
+
+  * Initial release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 12 Mar 2014 15:14:21 +0000

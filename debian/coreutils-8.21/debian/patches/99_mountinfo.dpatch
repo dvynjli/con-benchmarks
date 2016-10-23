@@ -1,0 +1,462 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 99_mountinfo.dpatch by  <ubuntu@wily-df.canonistack>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Make df prioritize fileystem root mounts over bind mounts
+## DP: Pulled in enablement for /proc/self/mountinfo in order to succeed in above
+## DP: Please see pad.lv/1432871 for more info
+## 
+## Bug-Ubuntu: http://pad.lv/1432871
+## Author: Dave Chiluk <chiluk@canonical.com>
+## Origin: upstream, gnulib - http://git.savannah.gnu.org/gitweb/?p=gnulib.git
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=62bb7a8bf95807d6339e1e17fc0d21c319b280a2
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=41d1b6c42641a5b9e21486ca2074198ee7909bd7
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=3ea43e02541ece750ffc6cd1dfe34195421b4ef3
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=2768ceb7994506e2cfba88be3b6bd13ef5440a90
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=de1cbdd48244c66c51a3e2bc1594ac3ad32ce038
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=3fb6e360363744462ce15c381f0b116c6fc4ce82
+## commit: http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commit;h=c6148bca89e9465fd6ba3a10d273ec4cb58c2dbe
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/ChangeLog coreutils-8.21/ChangeLog
+--- coreutils-8.21~/ChangeLog	2013-02-14 10:22:58.000000000 -0600
++++ coreutils-8.21/ChangeLog	2015-11-05 08:29:58.000000000 -0600
+@@ -1,3 +1,75 @@
++2015-09-08  Dave Chiluk  <chiluk@canonical.com>
++
++	mountlist: add me_mntroot field on Linux machines
++	* lib/mountlist.c (read_file_system_list): Populate me_mntroot in
++	mount_entry so Linux machines based on /proc/self/mountinfo can
++	distinguish between bind mounts and original mounts.  In reality bind
++	mounts aren't treated differently than mountroot=/ mounts by the
++	kernel, but the user often wants these bind mounts distinguished.
++	* lib/mountlist.h (struct mount_entry): Add me_mntroot element.
++	More details at https://pad.lv/1432871
++
++2015-04-02  Pádraig Brady  <P@draigBrady.com>
++
++	mountlist: remove dependency on libmount
++	* lib/mountlist.c (read_file_system_list): Parse /proc/self/mountinfo
++	directly, rather than depending on libmount, which has many
++	dependencies due to its dependence on libselinux, as detailed at:
++	http://lists.gnu.org/archive/html/bug-gnulib/2015-01/msg00063.html
++	Note we restrict this to __linux__ as that's probably where this
++	interface will remain.  If ever porting, it would be best
++	to first pull the makedev() wrapper from coreutils to a gnulib module.
++	Note also we don't add a getline dependency to the mountlist module,
++	as all Linux versions are sufficient.
++
++2015-02-11  Pádraig Brady  <P@draigBrady.com>
++
++	mountlist: only use libmount when specified
++	There are currently many shared libs dependencies introduced by
++	libmount with associated runtime and virt mem overhead.
++	Therefore don't enable by default.
++	* m4/ls-mntd-fs.m4: Use --with-libmount to enable at build time.
++
++2014-10-30  Pádraig Brady  <P@draigBrady.com>
++
++	mountlist: don't use libmount to decide on dummy/remote
++	* lib/mountlist.c (read_file_system_list): Don't use the libmount
++	routines to determine whether a file system is dummy or remote,
++	as they're not currently compatible.  For example the remoteness
++	is determined on file system type (for which the list seems incomplete),
++	rather than simply checking for a ':' in the device name.
++	Also libmount currently determines that 'tmpfs' is a dummy file system
++	even though it has associated storage.
++
++2014-09-09  Fridolin Pokorny  <fpokorny@redhat.com>
++
++	mountlist: use /proc/self/mountinfo when available
++	Use libmount to propagate device IDs provided by Linux in
++	/proc/self/mountinfo.  This will give more accurate output when
++	using df in chroot'ed environments as the device IDs are not
++	determined by stat() which may be inaccurate within the chroot.
++	* lib/mountlist.c (read_file_system_list): Use the libmount routines
++	from util-linux to parse "/proc/self/mountinfo" or fall back to
++	standard getmntent() processing.
++	* m4/ls-mntd-fs.m4: Check for libmount only when 1-argument
++	getmntent() is used, as is the case on GNU/Linux.
++
++2013-07-09  Pádraig Brady  <P@draigBrady.com>
++
++	mountlist: add support for deallocating returned list entries
++	* lib/mountlist.c (free_mount_entry): A new exported function
++	to deallocate a mount list entry.
++	(read_file_system_list): Refactor to use the new deallocation function.
++	Suggested by Anton Ovchinnikov.
++
++2013-02-19  Paul Eggert  <eggert@cs.ucla.edu>
++
++	mountlist: port to HP NonStop
++	Reported by Joachim Schmitz in
++	<http://lists.gnu.org/archive/html/bug-gnulib/2013-02/msg00084.html>.
++	* lib/mountlist.c (hasmntopt) [!HAVE_HASMNTOPT]: New function.
++	(MNT_IGNORE) [MNTOPT_IGNORE]: Use it.
++
+ 2013-02-14  Pádraig Brady  <P@draigBrady.com>
+ 
+ 	version 8.21
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/lib/mountlist.c coreutils-8.21/lib/mountlist.c
+--- coreutils-8.21~/lib/mountlist.c	2013-02-07 10:44:47.000000000 -0600
++++ coreutils-8.21/lib/mountlist.c	2015-11-05 08:29:58.000000000 -0600
+@@ -58,6 +58,7 @@
+ 
+ #ifdef MOUNTED_GETMNTENT1       /* 4.3BSD, SunOS, HP-UX, Dynix, Irix.  */
+ # include <mntent.h>
++# include <sys/types.h>
+ # if !defined MOUNTED
+ #  if defined _PATH_MOUNTED     /* GNU libc  */
+ #   define MOUNTED _PATH_MOUNTED
+@@ -128,8 +129,12 @@
+ # include <sys/mntent.h>
+ #endif
+ 
++#ifndef HAVE_HASMNTOPT
++# define hasmntopt(mnt, opt) ((char *) 0)
++#endif
++
+ #undef MNT_IGNORE
+-#if defined MNTOPT_IGNORE && defined HAVE_HASMNTOPT
++#ifdef MNTOPT_IGNORE
+ # define MNT_IGNORE(M) hasmntopt (M, MNTOPT_IGNORE)
+ #else
+ # define MNT_IGNORE(M) 0
+@@ -172,10 +177,9 @@
+    we grant an exception to any with "bind" in its list of mount options.
+    I.e., those are *not* dummy entries.  */
+ #ifdef MOUNTED_GETMNTENT1
+-# define ME_DUMMY(Fs_name, Fs_type, Fs_ent)	\
++# define ME_DUMMY(Fs_name, Fs_type, Bind)	\
+   (ME_DUMMY_0 (Fs_name, Fs_type)		\
+-   || (strcmp (Fs_type, "none") == 0		\
+-       && !hasmntopt (Fs_ent, "bind")))
++   || (strcmp (Fs_type, "none") == 0 && !Bind))
+ #else
+ # define ME_DUMMY(Fs_name, Fs_type)		\
+   (ME_DUMMY_0 (Fs_name, Fs_type) || strcmp (Fs_type, "none") == 0)
+@@ -378,6 +382,34 @@
+ 
+ #endif
+ 
++#if defined MOUNTED_GETMNTENT1 && defined __linux__
++
++/* Unescape the paths in mount tables.
++   STR is updated in place.  */
++
++static void
++unescape_tab (char *str)
++{
++  size_t i, j = 0;
++  size_t len = strlen (str) + 1;
++  for (i = 0; i < len; i++)
++    {
++      if (str[i] == '\\' && (i + 4 < len)
++          && str[i + 1] >= '0' && str[i + 1] <= '3'
++          && str[i + 2] >= '0' && str[i + 2] <= '7'
++          && str[i + 3] >= '0' && str[i + 3] <= '7')
++        {
++          str[j++] = (str[i + 1] - '0') * 64 +
++                     (str[i + 2] - '0') * 8 +
++                     (str[i + 3] - '0');
++          i += 3;
++        }
++      else
++        str[j++] = str[i];
++    }
++}
++#endif
++
+ /* Return a list of the currently mounted file systems, or NULL on error.
+    Add each entry to the tail of the list so that they stay in order.
+    If NEED_FS_TYPE is true, ensure that the file system type fields in
+@@ -410,6 +442,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup (mnt->mnt_fsname);
+         me->me_mountdir = xstrdup (mnt->mnt_dir);
++        me->me_mntroot = NULL;
+         me->me_type = xstrdup (mnt->mnt_type);
+         me->me_type_malloced = 1;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -424,32 +457,132 @@
+ 
+ #ifdef MOUNTED_GETMNTENT1 /* GNU/Linux, 4.3BSD, SunOS, HP-UX, Dynix, Irix.  */
+   {
+-    struct mntent *mnt;
+-    char const *table = MOUNTED;
+     FILE *fp;
+ 
+-    fp = setmntent (table, "r");
+-    if (fp == NULL)
+-      return NULL;
+-
+-    while ((mnt = getmntent (fp)))
++#ifdef __linux__
++    /* Try parsing mountinfo first, as that make device IDs available.
++       Note we could use libmount routines to simplify this parsing a little
++       (and that code is in previous versions of this function), however
++       libmount depends on libselinux which pulls in many dependencies.  */
++    char const *mountinfo = "/proc/self/mountinfo";
++    fp = fopen (mountinfo, "r");
++    if (fp != NULL)
+       {
+-        me = xmalloc (sizeof *me);
+-        me->me_devname = xstrdup (mnt->mnt_fsname);
+-        me->me_mountdir = xstrdup (mnt->mnt_dir);
+-        me->me_type = xstrdup (mnt->mnt_type);
+-        me->me_type_malloced = 1;
+-        me->me_dummy = ME_DUMMY (me->me_devname, me->me_type, mnt);
+-        me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
+-        me->me_dev = dev_from_mount_options (mnt->mnt_opts);
++        char *line = NULL;
++        size_t buf_size = 0;
+ 
+-        /* Add to the linked list. */
+-        *mtail = me;
+-        mtail = &me->me_next;
++        while (getline (&line, &buf_size, fp) != -1)
++          {
++            unsigned int devmaj, devmin;
++            int target_s, target_e, type_s, type_e;
++            int source_s, source_e, mntroot_s, mntroot_e;
++            char test;
++            char *dash;
++            int rc;
++
++            rc = sscanf(line, "%*u "        /* id - discarded  */
++                              "%*u "        /* parent - discarded */
++                              "%u:%u "      /* dev major:minor  */
++                              "%n%*s%n "    /* mountroot */
++                              "%n%*s%n"     /* target, start and end  */
++                              "%c",         /* more data...  */
++                              &devmaj, &devmin,
++                              &mntroot_s, &mntroot_e,
++                              &target_s, &target_e,
++                              &test);
++
++            if (rc != 3 && rc != 7)  /* 7 if %n included in count.  */
++              continue;
++
++            /* skip optional fields, terminated by " - "  */
++            dash = strstr (line + target_e, " - ");
++            if (! dash)
++              continue;
++
++            rc = sscanf(dash, " - "
++                              "%n%*s%n "    /* FS type, start and end  */
++                              "%n%*s%n "    /* source, start and end  */
++                              "%c",         /* more data...  */
++                              &type_s, &type_e,
++                              &source_s, &source_e,
++                              &test);
++            if (rc != 1 && rc != 5)  /* 5 if %n included in count.  */
++              continue;
++
++            /* manipulate the sub-strings in place.  */
++            line[mntroot_e] = '\0';
++            line[target_e] = '\0';
++            dash[type_e] = '\0';
++            dash[source_e] = '\0';
++            unescape_tab (dash + source_s);
++            unescape_tab (line + target_s);
++            unescape_tab (line + mntroot_s);
++
++            me = xmalloc (sizeof *me);
++
++            me->me_devname = xstrdup (dash + source_s);
++            me->me_mountdir = xstrdup (line + target_s);
++            me->me_mntroot = xstrdup (line + mntroot_s);
++            me->me_type = xstrdup (dash + type_s);
++            me->me_type_malloced = 1;
++            me->me_dev = makedev (devmaj, devmin);
++            /* we pass "false" for the "Bind" option as that's only
++               significant when the Fs_type is "none" which will not be
++               the case when parsing "/proc/self/mountinfo", and only
++               applies for static /etc/mtab files.  */
++            me->me_dummy = ME_DUMMY (me->me_devname, me->me_type, false);
++            me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
++
++            /* Add to the linked list. */
++            *mtail = me;
++            mtail = &me->me_next;
++          }
++
++        free (line);
++
++        if (ferror (fp))
++          {
++            int saved_errno = errno;
++            fclose (fp);
++            errno = saved_errno;
++            goto free_then_fail;
++          }
++
++        if (fclose (fp) == EOF)
++          goto free_then_fail;
+       }
++    else /* fallback to /proc/self/mounts (/etc/mtab).  */
++#endif /* __linux __ */
++      {
++        struct mntent *mnt;
++        char const *table = MOUNTED;
+ 
+-    if (endmntent (fp) == 0)
+-      goto free_then_fail;
++        fp = setmntent (table, "r");
++        if (fp == NULL)
++          return NULL;
++
++        while ((mnt = getmntent (fp)))
++          {
++            bool bind = hasmntopt (mnt, "bind");
++
++            me = xmalloc (sizeof *me);
++            me->me_devname = xstrdup (mnt->mnt_fsname);
++            me->me_mountdir = xstrdup (mnt->mnt_dir);
++            me->me_mntroot = NULL;
++            me->me_type = xstrdup (mnt->mnt_type);
++            me->me_type_malloced = 1;
++            me->me_dummy = ME_DUMMY (me->me_devname, me->me_type, bind);
++            me->me_remote = ME_REMOTE (me->me_devname, me->me_type);
++            me->me_dev = dev_from_mount_options (mnt->mnt_opts);
++
++            /* Add to the linked list. */
++            *mtail = me;
++            mtail = &me->me_next;
++          }
++
++        if (endmntent (fp) == 0)
++          goto free_then_fail;
++      }
+   }
+ #endif /* MOUNTED_GETMNTENT1. */
+ 
+@@ -468,6 +601,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup (fsp->f_mntfromname);
+         me->me_mountdir = xstrdup (fsp->f_mntonname);
++        me->me_mntroot = NULL;
+         me->me_type = fs_type;
+         me->me_type_malloced = 0;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -494,6 +628,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup (fsp->f_mntfromname);
+         me->me_mountdir = xstrdup (fsp->f_mntonname);
++        me->me_mntroot = NULL;
+         me->me_type = xstrdup (fsp->f_fstypename);
+         me->me_type_malloced = 1;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -520,6 +655,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup (fsd.fd_req.devname);
+         me->me_mountdir = xstrdup (fsd.fd_req.path);
++        me->me_mntroot = NULL;
+         me->me_type = gt_names[fsd.fd_req.fstype];
+         me->me_type_malloced = 0;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -618,6 +754,7 @@
+           me->me_devname = xstrdup (fi.device_name[0] != '\0'
+                                     ? fi.device_name : fi.fsh_name);
+           me->me_mountdir = xstrdup (re != NULL ? re->name : fi.fsh_name);
++          me->me_mntroot = NULL;
+           me->me_type = xstrdup (fi.fsh_name);
+           me->me_type_malloced = 1;
+           me->me_dev = fi.dev;
+@@ -667,6 +804,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup (stats[counter].f_mntfromname);
+         me->me_mountdir = xstrdup (stats[counter].f_mntonname);
++        me->me_mntroot = NULL;
+         me->me_type = xstrdup (FS_TYPE (stats[counter]));
+         me->me_type_malloced = 1;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -703,6 +841,7 @@
+         strcpy (me->me_devname + 5, mnt.mt_dev);
+ # endif
+         me->me_mountdir = xstrdup (mnt.mt_filsys);
++        me->me_mntroot = NULL;
+         me->me_dev = (dev_t) -1;        /* Magic; means not known yet. */
+         me->me_type = "";
+         me->me_type_malloced = 0;
+@@ -750,6 +889,7 @@
+         me = xmalloc (sizeof *me);
+         me->me_devname = xstrdup ((*ent)->mt_resource);
+         me->me_mountdir = xstrdup ((*ent)->mt_directory);
++        me->me_mntroot = NULL;
+         me->me_type = xstrdup ((*ent)->mt_fstype);
+         me->me_type_malloced = 1;
+         me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -812,6 +952,7 @@
+             me = xmalloc (sizeof *me);
+             me->me_devname = xstrdup (mnt.mnt_special);
+             me->me_mountdir = xstrdup (mnt.mnt_mountp);
++            me->me_mntroot = NULL;
+             me->me_type = xstrdup (mnt.mnt_fstype);
+             me->me_type_malloced = 1;
+             me->me_dummy = MNT_IGNORE (&mnt) != 0;
+@@ -888,6 +1029,7 @@
+                                       vmp->vmt_data[VMT_OBJECT].vmt_off);
+           }
+         me->me_mountdir = xstrdup (thisent + vmp->vmt_data[VMT_STUB].vmt_off);
++        me->me_mntroot = NULL;
+         me->me_type = xstrdup (fstype_to_string (vmp->vmt_gfstype));
+         me->me_type_malloced = 1;
+         options = thisent + vmp->vmt_data[VMT_ARGS].vmt_off;
+@@ -931,6 +1073,7 @@
+             me = xmalloc (sizeof *me);
+             me->me_devname = xstrdup (dev.f_mntfromname);
+             me->me_mountdir = xstrdup (dev.f_mntonname);
++            me->me_mntroot = NULL;
+             me->me_type = xstrdup (dev.f_fstypename);
+             me->me_type_malloced = 1;
+             me->me_dummy = ME_DUMMY (me->me_devname, me->me_type);
+@@ -957,11 +1100,7 @@
+     while (mount_list)
+       {
+         me = mount_list->me_next;
+-        free (mount_list->me_devname);
+-        free (mount_list->me_mountdir);
+-        if (mount_list->me_type_malloced)
+-          free (mount_list->me_type);
+-        free (mount_list);
++        free_mount_entry (mount_list);
+         mount_list = me;
+       }
+ 
+@@ -969,3 +1108,15 @@
+     return NULL;
+   }
+ }
++
++/* Free a mount entry as returned from read_file_system_list ().  */
++
++void free_mount_entry (struct mount_entry *me)
++{
++  free (me->me_devname);
++  free (me->me_mountdir);
++  free (me->me_mntroot);
++  if (me->me_type_malloced)
++    free (me->me_type);
++  free (me);
++}
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/lib/mountlist.h coreutils-8.21/lib/mountlist.h
+--- coreutils-8.21~/lib/mountlist.h	2013-01-02 06:34:46.000000000 -0600
++++ coreutils-8.21/lib/mountlist.h	2015-11-05 08:29:58.000000000 -0600
+@@ -27,6 +27,8 @@
+ {
+   char *me_devname;             /* Device node name, including "/dev/". */
+   char *me_mountdir;            /* Mount point directory name. */
++  char *me_mntroot;             /* Directory on filesystem of device used */
++                                /* as root for the (bind) mount. */
+   char *me_type;                /* "nfs", "4.2", etc. */
+   dev_t me_dev;                 /* Device number of me_mountdir. */
+   unsigned int me_dummy : 1;    /* Nonzero for dummy file systems. */
+@@ -36,5 +38,6 @@
+ };
+ 
+ struct mount_entry *read_file_system_list (bool need_fs_type);
++void free_mount_entry (struct mount_entry *entry);
+ 
+ #endif
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/m4/ls-mntd-fs.m4 coreutils-8.21/m4/ls-mntd-fs.m4

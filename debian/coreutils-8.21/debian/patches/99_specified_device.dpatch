@@ -1,0 +1,206 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 99_specified_device.dpatch by Dave Chiluk <chiluk@canonical.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix issue where filesystems specified on the command line return
+##     Return references to udev.  As there are a many fixes to this area,
+##     I decided not to attempt to cherry-pick individual patches. Instead I 
+##     backported the diff between trusty and vivid of df.c, and then checked
+##     the commits of the changed lines.  This brings df.c more in line with what
+##     is available in vivid and newer, thereby hopefully reducing our maintenance
+##     burden.  The individual commits are below.
+## 
+## Bug-Ubuntu: http://pad.lv/1535349
+## Author: Dave Chiluk <chiluk@canonical.com>
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=75c090931
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=fb902297f
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=828801a17
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=d71c12f1e
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=dbd7c9452
+## commit: http://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=3ab3c7bb2
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' coreutils-8.21~/src/df.c coreutils-8.21/src/df.c
+--- coreutils-8.21~/src/df.c	2016-01-24 23:17:29.000000000 -0600
++++ coreutils-8.21/src/df.c	2016-01-24 23:23:29.308136162 -0600
+@@ -717,17 +717,17 @@
+ }
+ 
+ /* Search a mount entry list for device id DEV.
+-   Return the corresponding device name if found or NULL if not.  */
++   Return the corresponding mount entry if found or NULL if not.  */
+ 
+-static char const * _GL_ATTRIBUTE_PURE
+-devname_for_dev (dev_t dev)
++static struct mount_entry const * _GL_ATTRIBUTE_PURE
++me_for_dev (dev_t dev)
+ {
+   struct devlist *dl = device_list;
+ 
+   while (dl)
+     {
+       if (dl->dev_num == dev)
+-        return dl->me->me_devname;
++        return dl->me;
+       dl = dl->next;
+     }
+ 
+@@ -937,12 +937,15 @@
+   else if (process_all && show_all_fs)
+     {
+       /* Ensure we don't output incorrect stats for over-mounted directories.
+-         Discard stats when the device name doesn't match.  */
++         Discard stats when the device name doesn't match.  Though don't
++         discard when used and current mount entries are both remote due
++         to the possibility of aliased host names or exports.  */
+       struct stat sb;
+       if (stat (stat_file, &sb) == 0)
+         {
+-          char const * devname = devname_for_dev (sb.st_dev);
+-          if (devname && ! STREQ (devname, disk))
++          struct mount_entry const * dev_me = me_for_dev (sb.st_dev);
++          if (dev_me && ! STREQ (dev_me->me_devname, disk)
++              && (! dev_me->me_remote || ! me_remote))
+             {
+               fstype = "-";
+               fsu.fsu_blocksize = fsu.fsu_blocks = fsu.fsu_bfree =
+@@ -1120,6 +1123,33 @@
+   free (dev_name);
+ }
+ 
++/* Scan the mount list returning the _last_ device found for MOUNT.
++   NULL is returned if MOUNT not found.  The result is malloced.  */
++static char *
++last_device_for_mount (char const* mount)
++{
++  struct mount_entry const *me;
++  struct mount_entry const *le = NULL;
++
++  for (me = mount_list; me; me = me->me_next)
++    {
++      if (STREQ (me->me_mountdir, mount))
++        le = me;
++    }
++
++  if (le)
++    {
++      char *devname = le->me_devname;
++      char *canon_dev = canonicalize_file_name (devname);
++      if (canon_dev && IS_ABSOLUTE_FILE_NAME (canon_dev))
++        return canon_dev;
++      free (canon_dev);
++      return xstrdup (le->me_devname);
++    }
++  else
++    return NULL;
++}
++
+ /* If DISK corresponds to a mount point, show its usage
+    and return true.  Otherwise, return false.  */
+ static bool
+@@ -1127,10 +1157,60 @@
+ {
+   struct mount_entry const *me;
+   struct mount_entry const *best_match = NULL;
++  bool best_match_accessible = false;
++  bool eclipsed_device = false;
++  char const *file = disk;
+ 
++  char *resolved = canonicalize_file_name (disk);
++  if (resolved && IS_ABSOLUTE_FILE_NAME (resolved))
++    disk = resolved;
++
++  size_t best_match_len = SIZE_MAX;
+   for (me = mount_list; me; me = me->me_next)
+-    if (STREQ (disk, me->me_devname))
+-      best_match = me;
++    {
++      /* TODO: Should cache canon_dev in the mount_entry struct.  */
++      char *devname = me->me_devname;
++      char *canon_dev = canonicalize_file_name (me->me_devname);
++      if (canon_dev && IS_ABSOLUTE_FILE_NAME (canon_dev))
++        devname = canon_dev;
++
++      if (STREQ (disk, devname))
++        {
++          char *last_device = last_device_for_mount (me->me_mountdir);
++          eclipsed_device = last_device && ! STREQ (last_device, devname);
++          size_t len = strlen (me->me_mountdir);
++
++          if (! eclipsed_device
++              && (! best_match_accessible || len < best_match_len))
++            {
++              struct stat disk_stats;
++              bool this_match_accessible = false;
++
++              if (stat (me->me_mountdir, &disk_stats) == 0)
++                best_match_accessible = this_match_accessible = true;
++
++              if (this_match_accessible
++                  || (! best_match_accessible && len < best_match_len))
++                {
++                  best_match = me;
++                  if (len == 1) /* Traditional root.  */
++                    {
++                      free (last_device);
++                      free (canon_dev);
++                      break;
++                    }
++                  else
++                    best_match_len = len;
++                }
++            }
++
++          free (last_device);
++        }
++
++      free (canon_dev);
++    }
++
++  free (resolved);
+ 
+   if (best_match)
+     {
+@@ -1139,6 +1219,13 @@
+                best_match->me_remote, NULL, false);
+       return true;
+     }
++  else if (eclipsed_device)
++    {
++      error (0, 0, _("cannot access %s: over-mounted by another device"),
++             quote (file));
++      exit_status = EXIT_FAILURE;
++      return true;
++    }
+ 
+   return false;
+ }
+@@ -1163,17 +1250,19 @@
+       size_t best_match_len = 0;
+ 
+       for (me = mount_list; me; me = me->me_next)
+-      if (!STREQ (me->me_type, "lofs")
+-          && (!best_match || best_match->me_dummy || !me->me_dummy))
+         {
+-          size_t len = strlen (me->me_mountdir);
+-          if (best_match_len <= len && len <= resolved_len
+-              && (len == 1 /* root file system */
+-                  || ((len == resolved_len || resolved[len] == '/')
+-                      && STREQ_LEN (me->me_mountdir, resolved, len))))
++          if (!STREQ (me->me_type, "lofs")
++              && (!best_match || best_match->me_dummy || !me->me_dummy))
+             {
+-              best_match = me;
+-              best_match_len = len;
++              size_t len = strlen (me->me_mountdir);
++              if (best_match_len <= len && len <= resolved_len
++                  && (len == 1 /* root file system */
++                      || ((len == resolved_len || resolved[len] == '/')
++                          && STREQ_LEN (me->me_mountdir, resolved, len))))
++                {
++                  best_match = me;
++                  best_match_len = len;
++                }
+             }
+         }
+     }
