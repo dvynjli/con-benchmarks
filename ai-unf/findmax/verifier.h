@@ -1,11 +1,43 @@
 
-#ifndef _PRINTF2_
-#define _PRINTF2_
+#ifndef _VERIFIER__
+#define _VERIFIER__
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
+#include <assert.h>
+
+static void __VERIFIER_error()
+{
+   abort ();
+}
+
+static int  __VERIFIER_nondet_int()
+{
+   return random () % 1000;
+}
+
+void __VERIFIER_assume(int expr)
+{
+   (void) expr;
+}
+
+#ifdef assert
+#undef assert
+#endif
+
+#ifndef PRINTF2_REMOVE
+#define assert(expr) \
+   if (! (expr)) { \
+      __assert_fail (#expr, __FILE__, __LINE__, __func__); \
+      __VERIFIER_error (); \
+   }
+#else
+#define assert(expr) if (! (expr)) __VERIFIER_error ();
+#endif
+
 
 #ifdef __KLIBC__
 
@@ -37,6 +69,11 @@ static inline void fmtint (char *buff, uintmax_t v, int base, int sgn)
 #define __libc_init_poet()
 #endif // __KLIBC__
 
+// remove the call to __libc_init_poet() if PRINTF2_REMOVE is defined
+#ifdef PRINTF2_REMOVE
+#undef __libc_init_poet
+#define __libc_init_poet()
+#endif
 
 static inline int fputd (int d, FILE *f)
 {
@@ -107,8 +144,15 @@ static inline int fputlx (long unsigned d, FILE *f)
 #define asprintf2(strp,fmt,args...)      __asprintf2 (strp, fmt)
 #define vasprintf2(strp,fmt,ap)          __asprintf2 (strp, fmt)
 
-inline int __sprintf2 (char *buff, const char *fmt) { strcpy (buff,fmt); return strlen(fmt); }
-inline int __snprintf2 (char *buff, size_t s, const char *fmt) { strncpy (buff,fmt,s); return strnlen(fmt,s); }
+static inline int __sprintf2 (char *buff, const char *fmt)
+{
+   strcpy (buff,fmt); return strlen(fmt);
+}
+static inline int __snprintf2 (char *buff, size_t s, const char *fmt)
+{
+   strncpy (buff,fmt,s);
+   return strnlen(fmt,s);
+}
 inline int __asprintf2(char **strp, const char *fmt)
 {
    size_t len = strlen (fmt);
@@ -129,7 +173,6 @@ inline int __asprintf2(char **strp, const char *fmt)
 #define asprintf2(strp,fmt,args...)     
 #define vasprintf2(strp,fmt,ap)         
 #endif
-
 
 #endif // _PRINTF2_
 

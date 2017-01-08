@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define PRINTF2_NORMAL
-#include "printf2.h"
+#define PRINTF2_REMOVE
+#include "verifier.h"
 
 #define MAX_QUEUE 5
 #define MAX_ITEMS 7
@@ -92,6 +92,7 @@ void producer ()
    for (i = 0; i < MAX_ITEMS; i++)
    {
       idx = findmaxidx (source, MAX_ITEMS);
+      assert (idx < MAX_ITEMS);
       queue_insert (idx);
    }
 }
@@ -103,6 +104,8 @@ void consumer ()
    {
       idx = queue_extract ();
       sorted[i] = idx;
+      assert (idx >= 0);
+      assert (idx < MAX_ITEMS);
    }
 }
 
@@ -124,10 +127,13 @@ int main ()
    unsigned seed = (unsigned) time (0);
    int i;
    srand (seed);
-   printf ("Using seed %u\n", seed);
+   printf2 ("Using seed %u\n", seed);
    for (i = 0; i < MAX_ITEMS; i++)
    {
-      source[i] = random() % 20;
+      //source[i] = __VERIFIER_nondet_int() % 20;
+      source[i] = __VERIFIER_nondet_int();
+      __VERIFIER_assume (source[i] >= 0);
+      __VERIFIER_assume (source[i] < 20);
       assert (source[i] >= 0);
       printf2 ("source[%d] = %d\n", i, source[i]);
    }
@@ -147,4 +153,3 @@ int main ()
 #endif
    return 0;
 }
-
