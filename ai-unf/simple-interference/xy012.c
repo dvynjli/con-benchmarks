@@ -13,12 +13,12 @@ void *thread (void *arg)
    y = 1;
    pthread_mutex_unlock (&m);
 
-	return 0;
+   return 0;
 }
 
 int main ()
 {
-	void *p;
+   void *p;
    pthread_t t;
 
    pthread_mutex_init (&m, 0);
@@ -30,9 +30,9 @@ int main ()
    pthread_mutex_unlock (&m);
 
    pthread_mutex_lock (&m);
-	assert (x == y);
+   assert (x == y);
    pthread_mutex_unlock (&m);
 
    pthread_join (t, &p);
-	return 0;
+   return 0;
 }
