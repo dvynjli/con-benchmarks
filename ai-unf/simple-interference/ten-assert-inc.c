@@ -1,5 +1,3 @@
-
-
 #include <assert.h>
 #include <pthread.h>
 
@@ -16,7 +14,7 @@ void *thread (void *arg)
 
 int main ()
 {
-   void *p;
+   //void *p;
    pthread_t t;
 
    pthread_mutex_init (&m, 0);
@@ -27,7 +25,6 @@ int main ()
    x = 10;
    pthread_mutex_unlock (&m);
 
-   pthread_join (t, &p);
+   //pthread_join (t, &p);
    return 0;
 }
-

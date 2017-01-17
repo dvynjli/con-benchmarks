@@ -26,7 +26,7 @@ int ping_pong ()
 {
    int msgloc;
    int xloc;
-   void *p;
+   //void *p;
    pthread_t t;
 
    pthread_mutex_init (&m, 0);
@@ -46,7 +46,7 @@ int ping_pong ()
       pthread_mutex_unlock (&m);
    } while (msgloc != 1);
 
-   pthread_join (t, &p);
+   //pthread_join (t, &p);
    assert (xloc == 4);
    return 0;
 }

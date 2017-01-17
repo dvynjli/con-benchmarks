@@ -14,7 +14,7 @@ void *thread (void *arg)
 
 int main ()
 {
-   void *p;
+   //void *p;
    pthread_t t;
 
    pthread_mutex_init (&m, 0);
@@ -24,9 +24,11 @@ int main ()
    x++;
    pthread_mutex_unlock (&m);
 
-   pthread_join (t, &p);
+   //pthread_join (t, &p);
+   //assert (x == 2);
 
+   pthread_mutex_lock (&m);
    assert (x == 1 || x == 2);
+   pthread_mutex_unlock (&m);
    return 0;
 }
-
