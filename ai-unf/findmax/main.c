@@ -1,6 +1,6 @@
 //#include "verifier-framac.h"
 #include "verifier-none.h"
-#include <stdlib.h>
+//#include "verifier-poet.h"
 
 #define MAX_QUEUE 5
 #define MAX_ITEMS 7
@@ -148,10 +148,10 @@ int main ()
    __libc_init_poet ();
 
    // this code initializes the source array with random numbers
-   unsigned seed = (unsigned) 123; // time(0);
+   //unsigned seed = (unsigned) 123; // time(0);
+   //srand (seed);
+   //printf ("Using seed %u\n", seed);
    int i;
-   srand (seed);
-   printf ("Using seed %u\n", seed);
    for (i = 0; i < MAX_ITEMS; i++)
    {
       source[i] = __VERIFIER_nondet_int() % 20;
