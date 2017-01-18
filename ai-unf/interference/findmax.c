@@ -1,5 +1,5 @@
-//#include "verifier-framac.h"
-#include "verifier-none.h"
+#include "verifier-framac.h"
+//#include "verifier-none.h"
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
@@ -9,6 +9,8 @@
 int q[MAX_QUEUE];
 int qsiz;
 pthread_mutex_t mq;
+pthread_mutex_t mutexdone;
+int donecount = 0;
 
 void queue_init ()
 {
@@ -116,9 +118,7 @@ void consumer ()
    {
       idx = queue_extract ();
       sorted[i] = idx;
-		printf ("idx %d\n", idx);
-		printf ("MAX_ITEMS %d\n", MAX_ITEMS);
-		printf ("source[idx] %d\n", source[idx]);
+      printf ("m: i %d sorted = %d\n", i, sorted[i]);
 
 		// global
       __VERIFIER_assert (idx >= 0);
@@ -139,39 +139,46 @@ void *thread (void * arg)
 {
    (void) arg;
    producer ();
+
+#ifndef VERIFIER_HAVE_PTHREAD_JOIN
+	pthread_mutex_lock (&mutexdone);
+	donecount++;
+	pthread_mutex_unlock (&mutexdone);
+#endif
    return NULL;
 }
 
 int main ()
 {
    pthread_t t;
+   int i;
 
    __libc_init_poet ();
 
-   // this code initializes the source array with random numbers
-   //unsigned seed = (unsigned) 123; // time(0);
-   //srand (seed);
-   //printf ("Using seed %u\n", seed);
-   int i;
+	// initialize the source array
    for (i = 0; i < MAX_ITEMS; i++)
    {
       source[i] = __VERIFIER_nondet_int() % 20;
-      printf ("source[%d] = %d\n", i, source[i]);
+      printf ("m: init i %d source = %d\n", i, source[i]);
 		__VERIFIER_assert (source[i] >= 0);
+		//@ assert (source[i] >= 0);
    }
-   printf ("==============\n");
-	__VERIFIER_assert (source[3] >= 0);
 
+	// initialize shared variables
    queue_init ();
+	pthread_mutex_init (&mutexdone, NULL);
+
+	// create one thread and run the consummer in the main thread
    pthread_create (&t, NULL, thread, NULL);
    consumer ();
-   pthread_join (t, NULL);
 
-#if 1
-   // this code prints the sorted array
-   printf ("==============\n");
-   for (i = 0; i < MAX_ITEMS; i++)
-      printf ("sorted[%d] = %d\n", i, sorted[i]);
+	// join
+#ifdef VERIFIER_HAVE_PTHREAD_JOIN
+   pthread_join (t, NULL);
+#else
+	pthread_mutex_lock (&mutexdone);
+	if (donecount != 1) return 0;
+	pthread_mutex_unlock (&mutexdone);
 #endif
    return 0;
 }

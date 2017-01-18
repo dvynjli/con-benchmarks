@@ -60,6 +60,8 @@ int main ()
 	pthread_t t[NUM_THREADS];
 	int count;
 
+   __libc_init_poet ();
+
 	// non-deterministically choose a DNA sequence
 	// A = 0
 	// T = 1
