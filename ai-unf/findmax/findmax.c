@@ -1,6 +1,7 @@
 //#include "verifier-framac.h"
 #include "verifier-none.h"
 //#include "verifier-poet.h"
+//#include "verifier-astrea.h"
 
 #define MAX_QUEUE 5
 #define MAX_ITEMS 7
