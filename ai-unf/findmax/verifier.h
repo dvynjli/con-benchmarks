@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include <assert.h>
 
 static void __VERIFIER_error()
@@ -16,10 +16,10 @@ static void __VERIFIER_error()
 
 static int  __VERIFIER_nondet_int()
 {
-   return random () % 1000;
+   return rand ();
 }
 
-void __VERIFIER_assume(int expr)
+static void __VERIFIER_assume(int expr)
 {
    (void) expr;
 }

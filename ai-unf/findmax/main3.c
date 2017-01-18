@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #define PRINTF2_NORMAL
-#include "printf2.h"
+#include "verifier.h"
 
 #define MAX_QUEUE 5
 #define MAX_ITEMS 7
@@ -146,4 +146,3 @@ int main ()
 #endif
    return 0;
 }
-

@@ -1,10 +1,6 @@
-#include <pthread.h>
-#include <stdio.h>
+//#include "verifier-framac.h"
+#include "verifier-none.h"
 #include <stdlib.h>
-#include <assert.h>
-
-#define PRINTF2_REMOVE
-#include "verifier.h"
 
 #define MAX_QUEUE 5
 #define MAX_ITEMS 7
@@ -23,14 +19,14 @@ void queue_insert (int x)
 {
    int done = 0;
    int i = 0;
-   printf2 ("prod: trying\n");
+   printf ("prod: trying\n");
    while (done == 0)
    {
       i++;
       pthread_mutex_lock (&mq);
       if (qsiz < MAX_QUEUE)
       {
-         printf2 ("prod: got it! x %d qsiz %d i %d\n", x, qsiz, i);
+         printf ("prod: got it! x %d qsiz %d i %d\n", x, qsiz, i);
          done = 1;
          q[qsiz] = x;
          qsiz++;
@@ -42,8 +38,8 @@ void queue_insert (int x)
 int queue_extract ()
 {
    int done = 0;
-   int x, i = 0;
-   printf2 ("consumer: trying\n");
+   int x = -1, i = 0;
+   printf ("consumer: trying\n");
    while (done == 0)
    {
       i++;
@@ -52,7 +48,7 @@ int queue_extract ()
       {
          done = 1;
          x = q[0];
-         printf2 ("consumer: got it! x %d qsiz %d i %d\n", x, qsiz, i);
+         printf ("consumer: got it! x %d qsiz %d i %d\n", x, qsiz, i);
          qsiz--;
          for (i = 0; i < qsiz; i++) q[i] = q[i+1]; // shift left 1 elem
       }
@@ -77,7 +73,14 @@ int findmaxidx (int *t, int count)
    {
       if (t[i] > t[mx]) mx = i;
    }
-   assert (mx < count);
+	// local
+   __VERIFIER_assert (mx >= 0);
+   //@ assert (mx >= 0);
+
+	// local
+   __VERIFIER_assert (mx < count);
+   //@ assert (mx < count);
+
    t[mx] = -t[mx];
    return mx;
 }
@@ -92,7 +95,15 @@ void producer ()
    for (i = 0; i < MAX_ITEMS; i++)
    {
       idx = findmaxidx (source, MAX_ITEMS);
-      assert (idx < MAX_ITEMS);
+
+		// local
+      __VERIFIER_assert (idx >= 0);
+      //@ assert (idx >= 0);
+
+		// local
+      __VERIFIER_assert (idx < MAX_ITEMS);
+      //@ assert (idx < MAX_ITEMS);
+
       queue_insert (idx);
    }
 }
@@ -104,8 +115,22 @@ void consumer ()
    {
       idx = queue_extract ();
       sorted[i] = idx;
-      assert (idx >= 0);
-      assert (idx < MAX_ITEMS);
+		printf ("idx %d\n", idx);
+		printf ("MAX_ITEMS %d\n", MAX_ITEMS);
+		printf ("source[idx] %d\n", source[idx]);
+
+		// global
+      __VERIFIER_assert (idx >= 0);
+      //@ assert (idx >= 0);
+
+		// global
+      __VERIFIER_assert (idx < MAX_ITEMS);
+      //@ assert (idx < MAX_ITEMS);
+
+		// global, requires relational domain, does not race; wont be able to
+		// prove it with poet, frama-c or AstreA
+      //__VERIFIER_assert (source[idx] < 0);
+      ////@ assert (source[idx] < 0);
    }
 }
 
@@ -122,23 +147,19 @@ int main ()
 
    __libc_init_poet ();
 
-#if 1
    // this code initializes the source array with random numbers
-   unsigned seed = (unsigned) time (0);
+   unsigned seed = (unsigned) 123; // time(0);
    int i;
    srand (seed);
-   printf2 ("Using seed %u\n", seed);
+   printf ("Using seed %u\n", seed);
    for (i = 0; i < MAX_ITEMS; i++)
    {
-      //source[i] = __VERIFIER_nondet_int() % 20;
-      source[i] = __VERIFIER_nondet_int();
-      __VERIFIER_assume (source[i] >= 0);
-      __VERIFIER_assume (source[i] < 20);
-      assert (source[i] >= 0);
-      printf2 ("source[%d] = %d\n", i, source[i]);
+      source[i] = __VERIFIER_nondet_int() % 20;
+      printf ("source[%d] = %d\n", i, source[i]);
+		__VERIFIER_assert (source[i] >= 0);
    }
-   printf2 ("==============\n");
-#endif
+   printf ("==============\n");
+	__VERIFIER_assert (source[3] >= 0);
 
    queue_init ();
    pthread_create (&t, NULL, thread, NULL);
@@ -147,9 +168,10 @@ int main ()
 
 #if 1
    // this code prints the sorted array
-   printf2 ("==============\n");
+   printf ("==============\n");
    for (i = 0; i < MAX_ITEMS; i++)
-      printf2 ("sorted[%d] = %d\n", i, sorted[i]);
+      printf ("sorted[%d] = %d\n", i, sorted[i]);
 #endif
    return 0;
 }
+
