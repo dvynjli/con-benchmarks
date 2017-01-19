@@ -3,8 +3,8 @@
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define NUM_THREADS 2
-#define ELEM_PER_THREAD 20
+#define NUM_THREADS 1
+#define ELEM_PER_THREAD 3 
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
 

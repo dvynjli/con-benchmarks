@@ -3,8 +3,8 @@
 #include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define MAX_QUEUE 1
-#define MAX_ITEMS 1
+#define MAX_QUEUE 2
+#define MAX_ITEMS 3
 
 int q[MAX_QUEUE];
 int qsiz;
@@ -182,6 +182,7 @@ int main ()
    if (donecount != 1) return 0;
    pthread_mutex_unlock (&mutexdone);
 #endif
+
    return 0;
 }
 
