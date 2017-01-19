@@ -8,6 +8,9 @@
 #include "__fc_builtin.h"
 #include <mthread_pthread.h>
 
+#define VERIFIER_FRAMAC
+#undef VERIFIER_HAVE_PTHREAD_JOIN
+
 static void __VERIFIER_error()
 {
   Frama_C_show_each ("__VERIFIER_error called");

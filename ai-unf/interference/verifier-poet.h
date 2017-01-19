@@ -3,6 +3,9 @@
 
 #include "poet_pthread.h"
 
+#define VERIFIER_POET
+#undef VERIFIER_HAVE_PTHREAD_JOIN
+
 void __VERIFIER_error();
 int  __VERIFIER_nondet_int();
 void __VERIFIER_assume(int expr);

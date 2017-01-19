@@ -23,16 +23,19 @@ CFLAGS=-Wall -pthread
 CC=clang
 LDLIBS=
 
-
 FCROOT=~/x/devel/frama-c-Aluminium-20160501+dev
 FC=$(FCROOT)/bin/frama-c
-FFLAGS=-machdep x86_64 -no-unicode -slevel 1 -wlevel 10 -mt-verbose 2
+FFLAGS=-machdep x86_64 -no-unicode -slevel 1 -wlevel 20 -mt-verbose 2
 
-all : main
-	./main
+T=threadpool
+S=atgc-count.c findmax.c threadpool.c
+O=$(S:.c=)
+
+all : $T
+	./$T
 
 clean :
-	rm -f main *.o full.c
+	rm -f $O *.o full.c
 
 v veri :
-	$(FC) $(FFLAGS) -mthread -print main-framac.c mthread_*.c > out.cc
+	$(FC) $(FFLAGS) -mthread -print $T.c mthread_*.c > out.cc

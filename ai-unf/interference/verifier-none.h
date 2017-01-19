@@ -8,6 +8,7 @@
 #include <assert.h>
 
 #define VERIFIER_NONE
+#define VERIFIER_HAVE_PTHREAD_JOIN
 
 static void __VERIFIER_error()
 {
@@ -17,6 +18,12 @@ static void __VERIFIER_error()
 
 static int  __VERIFIER_nondet_int()
 {
+	static int init = 0;
+	if (! init)
+	{
+		init = 1;
+		srand (time (0));
+	}
    return rand ();
 }
 
@@ -36,7 +43,7 @@ void __VERIFIER_assert (int expr)
 
 #define __VERIFIER_assert(expr) \
    if (! (expr)) { \
-      __assert_fail ("__VERIFIER_assert failed: " #expr, __FILE__, __LINE__, __func__); \
+      __assert_fail (#expr, __FILE__, __LINE__, __func__); \
       __VERIFIER_error (); \
    }
 
