@@ -1,6 +1,7 @@
 //#include "verifier-framac.h"
 #include "verifier-none.h"
 //#include "verifier-poet.h"
+//#include "verifier-astrea.h"
 
 #define NUM_THREADS 2
 #define MAX_ITEMS 7
@@ -64,7 +65,7 @@ int main ()
    int i;
    for (i = 0; i < MAX_ITEMS; i++)
    {
-      source[i] = __VERIFIER_nondet_int() % 20;
+      source[i] = __VERIFIER_nondet_int (0, 20);
       printf ("source[%d] = %d\n", i, source[i]);
       __VERIFIER_assert (source[i] >= 0);
    }

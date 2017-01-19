@@ -16,7 +16,7 @@ static void __VERIFIER_error()
    abort ();
 }
 
-static int  __VERIFIER_nondet_int()
+static int  __VERIFIER_nondet_int(int min, int max)
 {
 	static int init = 0;
 	if (! init)
@@ -24,7 +24,7 @@ static int  __VERIFIER_nondet_int()
 		init = 1;
 		srand (time (0));
 	}
-   return rand ();
+   return min + (rand() % max);
 }
 
 static void __VERIFIER_assume(int expr)

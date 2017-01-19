@@ -1,5 +1,5 @@
-//#include "verifier-none.h"
-#include "verifier-framac.h"
+//#include "verifier-framac.h"
+#include "verifier-none.h"
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
@@ -69,12 +69,12 @@ int main ()
 	// C = 3
 	for (i = 0; i < SEQSIZE; i++)
 	{
-		sequence[i] = __VERIFIER_nondet_int() % 4;
+		sequence[i] = __VERIFIER_nondet_int (0, 4);
 		printf ("m: init i %d seq %d\n", i, sequence[i]);
 	}
 
 	// non-deterministically choose a nucleotide to count
-	target = __VERIFIER_nondet_int() % 4;
+	target = __VERIFIER_nondet_int (0, 4);
 
 	// initialize shared variables
 	pthread_mutex_init (&mutexid, NULL);

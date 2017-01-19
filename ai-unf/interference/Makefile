@@ -30,7 +30,7 @@ FFLAGS=-machdep x86_64 -no-unicode -slevel 1 -wlevel 20 -mt-verbose 2
 PPC=cilly
 
 T=findmax
-S=atgc-count.c findmax.c threadpool.c
+S=atgc-count.c findmax.c threadpool.c robots.c sorting.c
 O=$(S:.c=)
 
 all : $T
