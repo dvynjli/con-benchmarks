@@ -27,7 +27,9 @@ FCROOT=~/x/devel/frama-c-Aluminium-20160501+dev
 FC=$(FCROOT)/bin/frama-c
 FFLAGS=-machdep x86_64 -no-unicode -slevel 1 -wlevel 20 -mt-verbose 2
 
-T=threadpool
+PPC=cilly
+
+T=findmax.c
 S=atgc-count.c findmax.c threadpool.c
 O=$(S:.c=)
 
@@ -39,3 +41,6 @@ clean :
 
 v veri :
 	$(FC) $(FFLAGS) -mthread -print $T.c mthread_*.c > out.cc
+
+poet :
+	$(PPC) --merge --out=full.c --dopoet $T.c 
