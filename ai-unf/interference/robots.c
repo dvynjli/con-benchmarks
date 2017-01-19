@@ -1,5 +1,5 @@
-#include "verifier-framac.h"
-//#include "verifier-none.h"
+//#include "verifier-framac.h"
+#include "verifier-none.h"
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
@@ -7,6 +7,7 @@
 
 #define MAX_RECHARGE 10
 #define MAX_DURATION 50
+#define MAX_BOARD_SIZE 20
 
 int source[NUM_ROBOTS];
 // output channel for main
@@ -57,7 +58,7 @@ void *robot (void * arg)
      if (duration == 0)
      {
        duration = __VERIFIER_nondet_int(1, MAX_DURATION);
-       dir = __VERIFIER_nondet_int (0, 2);
+       dir = __VERIFIER_nondet_int (0, 1);
 		 if (dir == 0) dir = -1;
      }
 
@@ -82,7 +83,7 @@ int main ()
    // this code initializes the source array with random numbers
    for (i = 0; i < NUM_ROBOTS; i++)
    {
-      source[i] = __VERIFIER_nondet_int (0, 20);
+      source[i] = __VERIFIER_nondet_int (0, MAX_BOARD_SIZE);
       printf ("m: source[%d] = %d\n", i, source[i]);
       //@ assert (source[i] >= 0);
       __VERIFIER_assert (source[i] >= 0);
@@ -110,7 +111,7 @@ int main ()
    while (k < NUM_ROBOTS)
    {
      // choose a random robot that still works
-     tid = __VERIFIER_nondet_int (0, NUM_ROBOTS);
+     tid = __VERIFIER_nondet_int (0, NUM_ROBOTS - 1);
 	  if (out_channel[tid] == 0) continue;
 	  printf ("m: picking tid %d out[tid] %d\n", tid, out_channel[tid]);
 

@@ -119,7 +119,7 @@ int main ()
 
    // =================================================
 	// 1st request to work
-	//arg = __VERIFIER_nondet_int (0, 1024);
+	//arg = __VERIFIER_nondet_int (0, 1023);
 	arg = 15;
    spinlock_inc (&control, &mut);
    spinlock_cas (&control, &mut, 2, 0);
@@ -134,7 +134,7 @@ int main ()
 
    // =================================================
 	// 2nd request to work
-	//arg = __VERIFIER_nondet_int (0, 1024);
+	//arg = __VERIFIER_nondet_int (0, 1023);
 	arg = 254;
    spinlock_inc (&control, &mut);
    spinlock_cas (&control, &mut, 2, 0);

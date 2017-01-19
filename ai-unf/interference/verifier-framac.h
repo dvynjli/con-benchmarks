@@ -19,6 +19,7 @@ static void __VERIFIER_error()
 
 static int __VERIFIER_nondet_int(int min, int max)
 {
+	max++;
    return min + (rand() % max);
 }
 
