@@ -24,6 +24,7 @@ static int  __VERIFIER_nondet_int(int min, int max)
 		init = 1;
 		srand (time (0));
 	}
+	max++;
    return min + (rand() % max);
 }
 

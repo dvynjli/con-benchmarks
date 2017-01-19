@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-//#include <malloc.h>
 
 #include "__fc_builtin.h"
 #include <mthread_pthread.h>
@@ -19,6 +18,7 @@ static void __VERIFIER_error()
 
 static int __VERIFIER_nondet_int(int min, int max)
 {
+	max++;
    return min + (rand() % max);
 }
 

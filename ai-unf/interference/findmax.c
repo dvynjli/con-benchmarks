@@ -78,11 +78,11 @@ int findmaxidx (int *t, int count)
    {
       if (t[i] > t[mx]) mx = i;
    }
-	// local
+   // local
    __VERIFIER_assert (mx >= 0);
    //@ assert (mx >= 0);
 
-	// local
+   // local
    __VERIFIER_assert (mx < count);
    //@ assert (mx < count);
 
@@ -101,11 +101,11 @@ void producer ()
    {
       idx = findmaxidx (source, MAX_ITEMS);
 
-		// local
+      // local
       __VERIFIER_assert (idx >= 0);
       //@ assert (idx >= 0);
 
-		// local
+      // local
       __VERIFIER_assert (idx < MAX_ITEMS);
       //@ assert (idx < MAX_ITEMS);
 
@@ -122,17 +122,17 @@ void consumer ()
       sorted[i] = idx;
       printf ("m: i %d sorted = %d\n", i, sorted[i]);
 
-		// global
+      // global
       __VERIFIER_assert (idx >= 0);
       //@ assert (idx >= 0);
 
-		// global
+      // global
       __VERIFIER_assert (idx < MAX_ITEMS);
       //@ assert (idx < MAX_ITEMS);
 
-		// global, requires relational domain, does not race; wont be able to
-		// prove it with poet, frama-c or AstreA
-      // __VERIFIER_assert (source[idx] < 0);
+      // global, requires relational domain, does not race; wont be able to
+      // prove it with poet, frama-c or AstreA
+      //__VERIFIER_assert (source[idx] < 0);
       ////@ assert (source[idx] < 0);
    }
 }
@@ -143,9 +143,9 @@ void *thread (void * arg)
    producer ();
 
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
-	pthread_mutex_lock (&mutexdone);
-	donecount++;
-	pthread_mutex_unlock (&mutexdone);
+   pthread_mutex_lock (&mutexdone);
+   donecount++;
+   pthread_mutex_unlock (&mutexdone);
 #endif
    return NULL;
 }
@@ -157,30 +157,30 @@ int main ()
 
    __libc_init_poet ();
 
-	// initialize the source array
+   // initialize the source array
    for (i = 0; i < MAX_ITEMS; i++)
    {
       source[i] = __VERIFIER_nondet_int(0,20);
       printf ("m: init i %d source = %d\n", i, source[i]);
-		__VERIFIER_assert (source[i] >= 0);
-		//@ assert (source[i] >= 0);
+      __VERIFIER_assert (source[i] >= 0);
+      //@ assert (source[i] >= 0);
    }
 
-	// initialize shared variables
+   // initialize shared variables
    queue_init ();
    pthread_mutex_init (&mutexdone, NULL);
 
-	// create one thread and run the consumer in the main thread
+   // create one thread and run the consummer in the main thread
    pthread_create (&t, NULL, thread, NULL);
    consumer ();
 
-	// join
+   // join
 #ifdef VERIFIER_HAVE_PTHREAD_JOIN
    pthread_join (t, NULL);
 #else
-	pthread_mutex_lock (&mutexdone);
-	if (donecount != 1) return 0;
-	pthread_mutex_unlock (&mutexdone);
+   pthread_mutex_lock (&mutexdone);
+   if (donecount != 1) return 0;
+   pthread_mutex_unlock (&mutexdone);
 #endif
 
    return 0;
