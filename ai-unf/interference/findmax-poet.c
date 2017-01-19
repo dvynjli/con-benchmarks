@@ -32,7 +32,7 @@ extern void __VERIFIER_error() ;
 #line 10
 extern int __VERIFIER_nondet_int(int  , int  ) ;
 #line 9 "findmax.c"
-int q[5]  ;
+int q[1]  ;
 #line 10 "findmax.c"
 int qsiz  ;
 #line 11 "findmax.c"
@@ -41,13 +41,13 @@ pthread_mutex_t mq  ;
 pthread_mutex_t mutexdone  ;
 #line 13 "findmax.c"
 int donecount  =    0;
-#line 91 "findmax.c"
-int source[7]  ;
-#line 138
+#line 93 "findmax.c"
+int source[1]  ;
+#line 140
 void *thread(void *arg ) ;
-#line 151
+#line 153
 int main(void) ;
-#line 151 "findmax.c"
+#line 153 "findmax.c"
 int main(void) 
 { 
   int _cil11 ;
@@ -58,32 +58,32 @@ int main(void)
   int i ;
 
   {
-#line 159
-  i = 0;
-#line 159
-  while (i < 7) {
 #line 161
+  i = 0;
+#line 161
+  while (i < 1) {
+#line 163
     source[i] = __VERIFIER_nondet_int(0, 20);
-#line 163
+#line 165
     if (! (source[i] >= 0)) {
-#line 163
+#line 165
       __VERIFIER_error();
     }
-#line 159
+#line 161
     i ++;
   }
 #line 17
   pthread_mutex_init(& mq, (pthread_mutexattr_t const   *)((void *)0));
 #line 18
   qsiz = 0;
-#line 169
+#line 171
   pthread_mutex_init(& mutexdone, (pthread_mutexattr_t const   *)((void *)0));
-#line 172
+#line 174
   pthread_create(& t, (pthread_attr_t const   *)((void *)0), & thread, (void *)0);
-#line 117
+#line 119
   _cil11 = 0;
-#line 117
-  while (_cil11 < 7) {
+#line 119
+  while (_cil11 < 1) {
 #line 43
     _cil9 = 0;
 #line 44
@@ -92,8 +92,6 @@ int main(void)
     _cil5 = 0;
 #line 46
     while (_cil9 == 0) {
-#line 48
-      _cil5 ++;
 #line 49
       pthread_mutex_lock(& mq);
 #line 50
@@ -113,104 +111,107 @@ int main(void)
 #line 56
           _cil5 ++;
         }
-      }
+#line 57
+        if (! (qsiz < 1)) {
+#line 57
+          __VERIFIER_error();
+        }
 #line 58
+        q[qsiz] = 0;
+      }
+#line 60
       pthread_mutex_unlock(& mq);
     }
 
-#line 124
+#line 126
     if (! (_cil7 >= 0)) {
-#line 124
+#line 126
       __VERIFIER_error();
     }
-#line 128
-    if (! (_cil7 < 7)) {
-#line 128
+#line 130
+    if (! (_cil7 < 1)) {
+#line 130
       __VERIFIER_error();
     }
-#line 117
+#line 119
     _cil11 ++;
   }
-#line 179
+#line 181
   pthread_mutex_lock(& mutexdone);
-#line 180
+#line 182
   if (donecount != 1) {
-#line 180
+#line 182
     return (0);
   }
-#line 181
-  pthread_mutex_unlock(& mutexdone);
 #line 183
+  pthread_mutex_unlock(& mutexdone);
+#line 185
   return (0);
 }
 }
-#line 138 "findmax.c"
+#line 140 "findmax.c"
 void *thread(void *arg ) 
 { 
-  int _cil18 ;
-  int _cil12 ;
+  int _cil16 ;
+  int *_cil14 ;
   int _cil10 ;
-  int _cil4 ;
+  int _cil8 ;
   int _cil2 ;
 
   {
-#line 98
-  _cil18 = 0;
-#line 98
-  while (_cil18 < 7) {
-#line 74
-    _cil10 = 0;
-#line 75
-    _cil12 = 1;
-#line 75
-    while (_cil12 < 7) {
+#line 100
+  _cil16 = 0;
+#line 100
+  while (_cil16 < 1) {
+#line 76
+    _cil8 = 0;
 #line 77
-      if (source[_cil12] > source[_cil10]) {
+    _cil10 = 1;
 #line 77
-        _cil10 = _cil12;
+    while (_cil10 < 1) {
+#line 79
+      if (source[_cil10] > source[_cil8]) {
+#line 79
+        _cil8 = _cil10;
       }
-#line 75
-      _cil12 ++;
+#line 77
+      _cil10 ++;
     }
-#line 80
-    if (! (_cil10 >= 0)) {
-#line 80
+#line 82
+    if (! (_cil8 >= 0)) {
+#line 82
       __VERIFIER_error();
     }
-#line 84
-    if (! (_cil10 < 7)) {
-#line 84
+#line 86
+    if (! (_cil8 < 1)) {
+#line 86
       __VERIFIER_error();
     }
-#line 87
-    source[_cil10] = - source[_cil10];
+#line 89
+    source[_cil8] = - source[_cil8];
 
-#line 103
-    if (! (_cil10 >= 0)) {
-#line 103
+#line 105
+    if (! (_cil8 >= 0)) {
+#line 105
       __VERIFIER_error();
     }
-#line 107
-    if (! (_cil10 < 7)) {
-#line 107
+#line 109
+    if (! (_cil8 < 1)) {
+#line 109
       __VERIFIER_error();
     }
 #line 23
-    _cil4 = 0;
-#line 24
     _cil2 = 0;
 #line 26
-    while (_cil4 == 0) {
-#line 28
-      _cil2 ++;
+    while (_cil2 == 0) {
 #line 29
       pthread_mutex_lock(& mq);
 #line 30
-      if (qsiz < 5) {
+      if (qsiz < 1) {
 #line 33
-        _cil4 = 1;
+        _cil2 = 1;
 #line 34
-        q[qsiz] = _cil10;
+        q[qsiz] = _cil8;
 #line 35
         qsiz ++;
       }
@@ -218,16 +219,16 @@ void *thread(void *arg )
       pthread_mutex_unlock(& mq);
     }
 
-#line 98
-    _cil18 ++;
+#line 100
+    _cil16 ++;
   }
-#line 144
-  pthread_mutex_lock(& mutexdone);
-#line 145
-  donecount ++;
 #line 146
-  pthread_mutex_unlock(& mutexdone);
+  pthread_mutex_lock(& mutexdone);
+#line 147
+  donecount ++;
 #line 148
+  pthread_mutex_unlock(& mutexdone);
+#line 150
   return ((void *)0);
 }
 }
