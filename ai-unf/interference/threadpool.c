@@ -40,6 +40,11 @@ void spinlock_inc (int *var, pthread_mutex_t *mutex)
 	pthread_mutex_unlock (mutex);
 }
 
+int last_bit_is_set (int a)
+{
+	return ((a / 2) * 2) != a;
+}
+
 
 int work (int arg_)
 {
@@ -56,16 +61,17 @@ int work (int arg_)
 	//@ assert (arg_ < 1024);
 	__VERIFIER_assert (arg_ < 1024);
 
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
-	if (arg_ & 1) count++; if (! arg_) goto end; arg_ /= 2;
+	// fix here
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
+	if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
 end:
 	printf ("t: work: count %d\n", count);
 
@@ -129,7 +135,7 @@ int main ()
    // =================================================
 	// 2nd request to work
 	//arg = __VERIFIER_nondet_int () % 1024;
-	arg = 0xfe;
+	arg = 254;
    spinlock_inc (&control, &mut);
    spinlock_cas (&control, &mut, 2, 0);
 
