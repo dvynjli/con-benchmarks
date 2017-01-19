@@ -3,8 +3,8 @@
 #include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define MAX_QUEUE 1
-#define MAX_ITEMS 1
+#define MAX_QUEUE 2
+#define MAX_ITEMS 3
 
 int q[MAX_QUEUE];
 int qsiz;
@@ -132,7 +132,7 @@ void consumer ()
 
 		// global, requires relational domain, does not race; wont be able to
 		// prove it with poet, frama-c or AstreA
-      //__VERIFIER_assert (source[idx] < 0);
+      __VERIFIER_assert (source[idx] < 0);
       ////@ assert (source[idx] < 0);
    }
 }
@@ -170,7 +170,7 @@ int main ()
    queue_init ();
    pthread_mutex_init (&mutexdone, NULL);
 
-	// create one thread and run the consummer in the main thread
+	// create one thread and run the consumer in the main thread
    pthread_create (&t, NULL, thread, NULL);
    consumer ();
 
