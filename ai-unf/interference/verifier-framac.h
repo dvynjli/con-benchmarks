@@ -17,9 +17,9 @@ static void __VERIFIER_error()
   Frama_C_abort ();
 }
 
-static int  __VERIFIER_nondet_int()
+static int __VERIFIER_nondet_int(int min, int max)
 {
-   return rand ();
+   return min + (rand() % max);
 }
 
 static void __VERIFIER_assume(int expr)
