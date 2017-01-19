@@ -132,7 +132,7 @@ void consumer ()
 
 		// global, requires relational domain, does not race; wont be able to
 		// prove it with poet, frama-c or AstreA
-      __VERIFIER_assert (source[idx] < 0);
+      // __VERIFIER_assert (source[idx] < 0);
       ////@ assert (source[idx] < 0);
    }
 }
@@ -182,6 +182,7 @@ int main ()
 	if (donecount != 1) return 0;
 	pthread_mutex_unlock (&mutexdone);
 #endif
+
    return 0;
 }
 
