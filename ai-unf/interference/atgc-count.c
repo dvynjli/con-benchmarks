@@ -1,6 +1,6 @@
 //#include "verifier-framac.h"
-#include "verifier-none.h"
-//#include "verifier-poet.h"
+//#include "verifier-none.h"
+#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
 #define NUM_THREADS 1
