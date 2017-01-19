@@ -7,7 +7,7 @@
 #undef VERIFIER_HAVE_PTHREAD_JOIN
 
 void __VERIFIER_error();
-int  __VERIFIER_nondet_int();
+int  __VERIFIER_nondet_int(int, int);
 void __VERIFIER_assume(int expr);
 
 #define __VERIFIER_assert(expr) \
