@@ -3,7 +3,7 @@
 #include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define NUM_THREADS 1
+#define NUM_THREADS 2
 #define ELEM_PER_THREAD 3 
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
@@ -36,8 +36,14 @@ void *thread (void *arg)
    count = 0;
    for (i = 0; i < ELEM_PER_THREAD; i++)
    {
-      if (sequence[from + i] == target) count++;
-      if (count > ELEM_PER_THREAD) count = ELEM_PER_THREAD; // to recover precission ...
+      if (sequence[from + i] == target)
+      {
+        count++;
+      }
+      if (count > ELEM_PER_THREAD)
+      { 
+        count = ELEM_PER_THREAD; // to recover precission ...
+      }
    }
    printf ("t: id %d from %d count %d\n", id, from, count);
 
@@ -60,7 +66,7 @@ int main ()
    pthread_t t[NUM_THREADS];
    int count;
 
-   __libc_init_poet ();
+   // __libc_init_poet ();
 
    // non-deterministically choose a DNA sequence
    // A = 0
@@ -84,22 +90,31 @@ int main ()
 
    // create the threads
    i = 0;
-   pthread_create (&t[i++], NULL, thread, NULL);
-   pthread_create (&t[i++], NULL, thread, NULL);
+   i++;
+   pthread_create (&t[i], NULL, thread, NULL);
+   i++;
+   pthread_create (&t[i], NULL, thread, NULL);
    __VERIFIER_assert (i == NUM_THREADS);
    //@ assert (i == NUM_THREADS);
 
    // wait for all threads to finish
 #ifdef VERIFIER_HAVE_PTHREAD_JOIN
    i = 0;
-   pthread_join (t[i++], NULL);
-   pthread_join (t[i++], NULL);
+   i++;
+   pthread_join (t[i], NULL);
+   i++;
+   pthread_join (t[i], NULL);
    __VERIFIER_assert (i == NUM_THREADS);
    //@ assert (i == NUM_THREADS);
 #else
    pthread_mutex_lock (&mutexdone);
-   if (donecount != NUM_THREADS) return 0;
+   i = donecount;
    pthread_mutex_unlock (&mutexdone);
+   
+   if (i != NUM_THREADS)
+   {
+     return 0;
+   }
 #endif
 
    // merge the results
