@@ -27,8 +27,8 @@ FCROOT=~/x/devel/frama-c-Aluminium-20160501+dev
 FC=$(FCROOT)/bin/frama-c
 FFLAGS=-machdep x86_64 -no-unicode -slevel 1 -wlevel 20 -mt-verbose 2
 
-T=robots
-S=atgc-count.c findmax.c threadpool.c robots.c
+T=sorting
+S=atgc-count.c findmax.c threadpool.c robots.c sorting.c
 O=$(S:.c=)
 
 all : $T
