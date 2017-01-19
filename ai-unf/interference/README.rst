@@ -27,4 +27,14 @@ atgc-count
   the id of one thread, and so it's unable to understand which positions of the
   sequence each thread is reading
 
+threadpool
+==========
 
+- We only have one thread, which simultes a thread in a pool of threads
+- The thread receives requests to work from the main thread; to signal a
+  request, the main thread sets the variable "control" to 1
+- The thread then starts to work, reading an argument from the variable "arg"
+  and setting the result of the task to variable "result"
+- The thread then increments the control variable, setting it to 2
+- The main thread waits until the control variable is equal to 2 to read the
+  results and assert that they are correct.
