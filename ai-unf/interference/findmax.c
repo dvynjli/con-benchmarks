@@ -3,8 +3,8 @@
 #include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define MAX_QUEUE 5
-#define MAX_ITEMS 7
+#define MAX_QUEUE 1
+#define MAX_ITEMS 1
 
 int q[MAX_QUEUE];
 int qsiz;
@@ -21,15 +21,15 @@ void queue_init ()
 void queue_insert (int x)
 {
    int done = 0;
-   int i = 0;
+  // int i = 0;
    printf ("prod: trying\n");
    while (done == 0)
    {
-      i++;
+    //  i++;
       pthread_mutex_lock (&mq);
       if (qsiz < MAX_QUEUE)
       {
-         printf ("prod: got it! x %d qsiz %d i %d\n", x, qsiz, i);
+      //   printf ("prod: got it! x %d qsiz %d i %d\n", x, qsiz, i);
          done = 1;
          q[qsiz] = x;
          qsiz++;
@@ -45,15 +45,17 @@ int queue_extract ()
    printf ("consumer: trying\n");
    while (done == 0)
    {
-      i++;
+   //   i++;
       pthread_mutex_lock (&mq);
       if (qsiz > 0)
       {
          done = 1;
          x = q[0];
-         printf ("consumer: got it! x %d qsiz %d i %d\n", x, qsiz, i);
+   //      printf ("consumer: got it! x %d qsiz %d i %d\n", x, qsiz, i);
          qsiz--;
          for (i = 0; i < qsiz; i++) q[i] = q[i+1]; // shift left 1 elem
+         __VERIFIER_assert (qsiz < MAX_QUEUE);
+         q[qsiz] = 0;
       }
       pthread_mutex_unlock (&mq);
    }
