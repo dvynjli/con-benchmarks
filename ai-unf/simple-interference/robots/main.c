@@ -4,15 +4,15 @@
 
 #define NUM_ROBOTS 2
 
-int source[NUM_THREADS];
+int source[NUM_ROBOTS];
 // output channel for main
-int out_channel[NUM_THREADS];
+int out_channel[NUM_ROBOTS];
 // input channel for main
-int in_channel[NUM_THREADS];
+int in_channel[NUM_ROBOTS];
 int th_id = 0;
 
 pthread_mutex_t mid;
-pthread_mutex_t ms[NUM_THREADS];
+pthread_mutex_t ms[NUM_ROBOTS];
 
 void *robot (void * arg)
 {
@@ -25,7 +25,7 @@ void *robot (void * arg)
    __VERIFIER_assert (id >= 0);
    
    // robot gets the square of his box
-   int size = source[NUM_THREADS];
+   int size = source[id];
    int dir = __VERIFIER_nondet_int() % 4;
    int position = __VERIFIER_nondet_int() % size;
    int duration = __VERIFIER_nondet_int() % 100;
@@ -69,7 +69,7 @@ void *robot (void * arg)
 
 int main ()
 {
-   pthread_t ths[NUM_THREADS];
+   pthread_t ths[NUM_ROBOTS];
 
    pthread_mutex_init (&mid, NULL);
    __libc_init_poet ();
@@ -79,7 +79,7 @@ int main ()
    srand (seed);
    printf ("Using seed %u\n", seed);
    int i;
-   for (i = 0; i < NUM_THREADS; i++)
+   for (i = 0; i < NUM_ROBOTS; i++)
    {
       source[i] = __VERIFIER_nondet_int() % 20;
       printf ("source[%d] = %d\n", i, source[i]);
@@ -88,11 +88,11 @@ int main ()
    printf ("==============\n");
 
    // this code initializes the mutexes, the channel and the minBound and maxBounds
-   for (i = 0; i < NUM_THREADS; i++)
+   for (i = 0; i < NUM_ROBOTS; i++)
    {
      out_channel[i] = __VERIFIER_nondet_int() % 1000;
      pthread_mutex_init (&ms[i], NULL);
-     pthread_create (&ths[i], NULL, sort_thread, NULL);
+     pthread_create (&ths[i], NULL, robot, NULL);
    }
 
 
@@ -100,10 +100,10 @@ int main ()
    int t = 0;
    int aux = 0;
 
-   while (k <= NUM_THREADS)
+   while (k <= NUM_ROBOTS)
    {
      // sample a random thread
-     tid = __VERIFIER_nondet_int() % NUM_THREADS;
+     tid = __VERIFIER_nondet_int() % NUM_ROBOTS;
 
      pthread_mutex_lock (&ms[tid]);
        aux = in_channel[id];
@@ -125,7 +125,7 @@ int main ()
 
    // if the tool supports join
 #if 1
-   for (i = 0; i < NUM_THREADS; i++) 
+   for (i = 0; i < NUM_ROBOTS; i++) 
    { 
      pthread_join (ths[i], NULL);
    }

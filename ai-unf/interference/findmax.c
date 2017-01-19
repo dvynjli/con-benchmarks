@@ -1,6 +1,6 @@
-#include "verifier-framac.h"
+//#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
+#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
 #define MAX_QUEUE 5
@@ -158,7 +158,7 @@ int main ()
 	// initialize the source array
    for (i = 0; i < MAX_ITEMS; i++)
    {
-      source[i] = __VERIFIER_nondet_int() % 20;
+      source[i] = __VERIFIER_nondet_int(0,20);
       printf ("m: init i %d source = %d\n", i, source[i]);
 		__VERIFIER_assert (source[i] >= 0);
 		//@ assert (source[i] >= 0);
@@ -166,7 +166,7 @@ int main ()
 
 	// initialize shared variables
    queue_init ();
-	pthread_mutex_init (&mutexdone, NULL);
+   pthread_mutex_init (&mutexdone, NULL);
 
 	// create one thread and run the consummer in the main thread
    pthread_create (&t, NULL, thread, NULL);
