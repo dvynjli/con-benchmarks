@@ -40,7 +40,7 @@ T=threadpool
 S=atgc-count.c findmax.c threadpool.c robots.c sorting.c $(wildcard svc16_*.c)
 O=$(S:.c=)
 
-all : $T
+all : $O
 	./$T
 
 clean :

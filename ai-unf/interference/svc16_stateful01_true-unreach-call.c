@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
-#include "verifier-none.h"
+//#include "verifier-none.h"
 //#include "verifier-poet.h"
-//#include "verifier-astrea.h"
+#include "verifier-astreea.h"
 
 pthread_mutex_t ma, mb;
 int data1, data2;
@@ -23,7 +23,7 @@ void * thread1(void * arg)
 
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
   pthread_mutex_lock(&ja);
-  joina = 1;
+  join1 = 1;
   pthread_mutex_unlock(&ja);
 #endif
   return 0;
@@ -41,7 +41,7 @@ void * thread2(void * arg)
 
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
   pthread_mutex_lock(&jb);
-  joinb = 1;
+  join2 = 1;
   pthread_mutex_unlock(&jb);
 #endif
   return 0;
@@ -70,11 +70,11 @@ int main()
   pthread_join(t2, 0);
 #else
   pthread_mutex_lock (&ja);
-  i = joina;
+  i = join1;
   pthread_mutex_unlock (&ja);
   if (! i) return 0;
   pthread_mutex_lock (&jb);
-  i = joinb;
+  i = join2;
   pthread_mutex_unlock (&jb);
   if (! i) return 0;
 #endif

@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
-#include "verifier-none.h"
+//#include "verifier-none.h"
 //#include "verifier-poet.h"
-//#include "verifier-astrea.h"
+#include "verifier-astreea.h"
 
 #define NUM_ROBOTS 2
 

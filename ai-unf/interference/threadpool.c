@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
-#include "verifier-none.h"
+//#include "verifier-none.h"
 //#include "verifier-poet.h"
-//#include "verifier-astrea.h"
+#include "verifier-astreea.h"
 
 pthread_mutex_t mut;
 int control = 0; /* 0 / 1 / 2 == no request / request to work / work finished */
@@ -126,7 +126,7 @@ void *thread (void *arg_)
 int main ()
 {
    pthread_t t;
-   int i, myres;
+   int myres;
 
    // initialize shared variables and create the thread
    pthread_mutex_init (&mut, NULL);
