@@ -86,8 +86,12 @@ int main ()
    pthread_mutex_init (&mutexid, NULL);
    pthread_mutex_init (&mutexdone, NULL);
    pthread_mutex_init (&mutexres, NULL);
-   for (i = 0; i < NUM_THREADS; i++) result[i] = 0;
+   for (i = 0; i < NUM_THREADS; i++)
+   {
+     result[i] = 0;
+   }
 
+/*
    // create the threads
    i = 0;
    i++;
@@ -110,12 +114,12 @@ int main ()
    pthread_mutex_lock (&mutexdone);
    i = donecount;
    pthread_mutex_unlock (&mutexdone);
-   
+*/ 
    if (i != NUM_THREADS)
    {
      return 0;
    }
-#endif
+// #endif
 
    // merge the results
    count = 0;
