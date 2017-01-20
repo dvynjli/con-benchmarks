@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-astreea.h"
+#include "verifier-poet.h"
+//#include "verifier-astreea.h"
 
 pthread_mutex_t mut;
 int control = 0; /* 0 / 1 / 2 == no request / request to work / work finished */
@@ -14,7 +14,7 @@ void spinlock_cas (int *var, pthread_mutex_t *mutex, int cmp, int set)
    // equals "cmp", then set to "set"
    
    int done = 0;
-   while (! done)
+   while (done == 0)
    {
       pthread_mutex_lock (mutex);
       if (*var == cmp)
@@ -60,31 +60,31 @@ int work (int arg_)
 
    
    if (last_bit_is_set (arg_)) count++;
-   if (arg_) {
+   if (arg_ == 1) {
     arg_ /= 2;
     if (last_bit_is_set (arg_)) count++;
-    if (arg_) {
+    if (arg_ == 1) {
      arg_ /= 2;
      if (last_bit_is_set (arg_)) count++;
-     if (arg_) {
+     if (arg_ == 1) {
       arg_ /= 2;
       if (last_bit_is_set (arg_)) count++;
-      if (arg_) {
+      if (arg_ == 1) {
        arg_ /= 2;
        if (last_bit_is_set (arg_)) count++;
-       if (arg_) {
+       if (arg_ == 1) {
         arg_ /= 2;
         if (last_bit_is_set (arg_)) count++;
-        if (arg_) {
+        if (arg_ == 1) {
          arg_ /= 2;
          if (last_bit_is_set (arg_)) count++;
-         if (arg_) {
+         if (arg_ == 1) {
           arg_ /= 2;
           if (last_bit_is_set (arg_)) count++;
-          if (arg_) {
+          if (arg_ == 1) {
            arg_ /= 2;
            if (last_bit_is_set (arg_)) count++;
-           if (arg_) {
+           if (arg_ == 1) {
             arg_ /= 2;
             if (last_bit_is_set (arg_)) count++;
             arg_ /= 2; // otherwise assertion below will fail
