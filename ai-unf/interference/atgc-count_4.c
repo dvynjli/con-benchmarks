@@ -3,7 +3,7 @@
 //#include "verifier-poet.h"
 #include "verifier-astreea.h"
 
-#define NUM_THREADS 2
+#define NUM_THREADS 4
 #define ELEM_PER_THREAD 30
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
@@ -100,6 +100,8 @@ int main ()
    i = 0;
    pthread_create (&t[i], NULL, thread, NULL); i++;
    pthread_create (&t[i], NULL, thread, NULL); i++;
+   pthread_create (&t[i], NULL, thread, NULL); i++;
+   pthread_create (&t[i], NULL, thread, NULL); i++;
    //@ assert (i == NUM_THREADS);
    __VERIFIER_assert (i == NUM_THREADS);
 
@@ -122,6 +124,8 @@ int main ()
    { \
      return 0; \
    }
+   ITER
+   ITER
    ITER
    ITER
    if (i != NUM_THREADS)

@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-#include "verifier-poet.h"
-//#include "verifier-astreea.h"
+//#include "verifier-poet.h"
+#include "verifier-astreea.h"
 
 pthread_mutex_t mut;
 int control = 0; /* 0 / 1 / 2 == no request / request to work / work finished */
