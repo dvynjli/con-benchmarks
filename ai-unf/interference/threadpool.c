@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
-#include "verifier-none.h"
+//#include "verifier-none.h"
 //#include "verifier-poet.h"
-//#include "verifier-astrea.h"
+#include "verifier-astreea.h"
 
 pthread_mutex_t mut;
 int control = 0; /* 0 / 1 / 2 == no request / request to work / work finished */
@@ -58,18 +58,45 @@ int work (int arg_)
    //@ assert (arg_ < 1024);
    __VERIFIER_assert (arg_ < 1024);
 
-   // fix here
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-   if (last_bit_is_set (arg_)) count++; if (! arg_) goto end; arg_ /= 2;
-end:
+   
+   if (last_bit_is_set (arg_)) count++;
+   if (arg_) {
+    arg_ /= 2;
+    if (last_bit_is_set (arg_)) count++;
+    if (arg_) {
+     arg_ /= 2;
+     if (last_bit_is_set (arg_)) count++;
+     if (arg_) {
+      arg_ /= 2;
+      if (last_bit_is_set (arg_)) count++;
+      if (arg_) {
+       arg_ /= 2;
+       if (last_bit_is_set (arg_)) count++;
+       if (arg_) {
+        arg_ /= 2;
+        if (last_bit_is_set (arg_)) count++;
+        if (arg_) {
+         arg_ /= 2;
+         if (last_bit_is_set (arg_)) count++;
+         if (arg_) {
+          arg_ /= 2;
+          if (last_bit_is_set (arg_)) count++;
+          if (arg_) {
+           arg_ /= 2;
+           if (last_bit_is_set (arg_)) count++;
+           if (arg_) {
+            arg_ /= 2;
+            if (last_bit_is_set (arg_)) count++;
+            arg_ /= 2; // otherwise assertion below will fail
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
    printf ("t: work: count %d\n", count);
 
    //@ assert (arg_ == 0);
@@ -99,7 +126,7 @@ void *thread (void *arg_)
 int main ()
 {
    pthread_t t;
-   int i, myres;
+   int myres;
 
    // initialize shared variables and create the thread
    pthread_mutex_init (&mut, NULL);
@@ -114,8 +141,8 @@ int main ()
 
    // =================================================
    // 1st request to work
-   //arg = __VERIFIER_nondet_int (0, 1023);
-   arg = 15;
+   //arg = 15;
+   arg = __VERIFIER_nondet_int (0, 1023);
    spinlock_inc (&control, &mut);
    spinlock_cas (&control, &mut, 2, 0);
 
@@ -129,8 +156,8 @@ int main ()
 
    // =================================================
    // 2nd request to work
-   //arg = __VERIFIER_nondet_int (0, 1023);
-   arg = 254;
+   //arg = 254;
+   arg = __VERIFIER_nondet_int (0, 1023);
    spinlock_inc (&control, &mut);
    spinlock_cas (&control, &mut, 2, 0);
 
