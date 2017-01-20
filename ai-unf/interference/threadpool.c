@@ -108,14 +108,21 @@ int work (int arg_)
 
 void *thread (void *arg_)
 {
-   while (1)
+   int done = 0;
+   while (done == 0)
    {
       // wait for a request to work (control == 1)
       spinlock_cas (&control, &mut, 1, 1);
 
       // do the work using the provided arguments, or terminate
-      if (arg == 1234) break;
-      result = work (arg);
+      if (arg == 1234)
+      {
+         done = 1;
+      }
+      else
+      {
+         result = work (arg);
+      }
 
       // replay back to the main thread
       spinlock_inc (&control, &mut);
