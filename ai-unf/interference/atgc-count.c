@@ -4,7 +4,7 @@
 //#include "verifier-astrea.h"
 
 #define NUM_THREADS 2
-#define ELEM_PER_THREAD 3 
+#define ELEM_PER_THREAD 1 
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
 
@@ -19,10 +19,10 @@ int sequence[SEQSIZE];
 
 void *thread (void *arg)
 {
-   int id, i, from, count;
-
+   int id, i, from, count, l_target;
    // get an id
    pthread_mutex_lock (&mutexid);
+   l_target = target;
    id = idcount;
    idcount++;
    pthread_mutex_unlock (&mutexid);
@@ -34,9 +34,10 @@ void *thread (void *arg)
    // scan my part of the sequence and count the number of desired nucleotides
    from = id * ELEM_PER_THREAD;
    count = 0;
+
    for (i = 0; i < ELEM_PER_THREAD; i++)
    {
-      if (sequence[from + i] == target)
+      if (sequence[from + i] == l_target)
       {
         count++;
       }
@@ -91,7 +92,6 @@ int main ()
      result[i] = 0;
    }
 
-/*
    // create the threads
    i = 0;
    i++;
@@ -114,12 +114,12 @@ int main ()
    pthread_mutex_lock (&mutexdone);
    i = donecount;
    pthread_mutex_unlock (&mutexdone);
-*/ 
+  
    if (i != NUM_THREADS)
    {
      return 0;
    }
-// #endif
+#endif
 
    // merge the results
    count = 0;
@@ -132,7 +132,8 @@ int main ()
    printf ("m: final count %d\n", count);
    __VERIFIER_assert (count >= 0);
    //@ assert (count >= 0);
-   __VERIFIER_assert (count <= SEQSIZE);
+   // __VERIFIER_assert (count <= SEQSIZE);
    //@ assert (count <= SEQSIZE);
+
    return 0;
 }
