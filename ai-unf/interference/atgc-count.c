@@ -1,10 +1,10 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-astreea.h"
+#include "verifier-poet.h"
+//#include "verifier-astrea.h"
 
 #define NUM_THREADS 2
-#define ELEM_PER_THREAD 3 
+#define ELEM_PER_THREAD 1 
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
 
@@ -19,24 +19,26 @@ int sequence[SEQSIZE];
 
 void *thread (void *arg)
 {
-   int id, i, from, count;
-
+   int id, i, from, count, l_target;
    // get an id
    pthread_mutex_lock (&mutexid);
+   l_target = target;
    id = idcount;
    idcount++;
    pthread_mutex_unlock (&mutexid);
    //@ assert (id >= 0);
    __VERIFIER_assert (id >= 0);
+
    //@ assert (id <= NUM_THREADS);
    __VERIFIER_assert (id <= NUM_THREADS);
 
    // scan my part of the sequence and count the number of desired nucleotides
    from = id * ELEM_PER_THREAD;
    count = 0;
+
    for (i = 0; i < ELEM_PER_THREAD; i++)
    {
-      if (sequence[from + i] == target)
+      if (sequence[from + i] == l_target)
       {
         count++;
       }
@@ -45,7 +47,7 @@ void *thread (void *arg)
         count = ELEM_PER_THREAD; // to recover precission ...
       }
    }
-   printf ("t: id %d from %d count %d\n", id, from, count);
+   // printf ("t: id %d from %d count %d\n", id, from, count);
 
    // send my result
    pthread_mutex_lock (&mutexres);
@@ -77,7 +79,7 @@ int main ()
    for (i = 0; i < SEQSIZE; i++)
    {
       sequence[i] = __VERIFIER_nondet_int (0, 3);
-      printf ("m: init i %d seq %d\n", i, sequence[i]);
+     // printf ("m: init i %d seq %d\n", i, sequence[i]);
    }
 
    // non-deterministically choose a nucleotide to count
@@ -115,13 +117,22 @@ int main ()
    j = join[i];
    pthread_mutex_unlock (&joinmutex[i]);
    i++;
-   if (!j) return 0;
+   if (j == 0)
+   { 
+     return 0;
+   }
    pthread_mutex_lock (&joinmutex[i]);
    j = join[i];
    pthread_mutex_unlock (&joinmutex[i]);
    i++;
-   if (!j) return 0;
-   if (i != NUM_THREADS) return 0;
+   if (j == 0)
+   { 
+     return 0;
+   }
+   if (i != NUM_THREADS)
+   { 
+     return 0;
+   }
 #endif
 
    // aggregate results
@@ -129,13 +140,14 @@ int main ()
    for (i = 0; i < NUM_THREADS; i++)
    {
       count += result[i];
-      printf ("m: i %d result %d count %d\n", i, result[i], count);
+   //   printf ("m: i %d result %d count %d\n", i, result[i], count);
    }
 
-   printf ("m: final count %d\n", count);
+  // printf ("m: final count %d\n", count);
    //@ assert (count >= 0);
    __VERIFIER_assert (count >= 0);
+
    //@ assert (count <= SEQSIZE);
-   __VERIFIER_assert (count <= SEQSIZE);
+   //__VERIFIER_assert (count <= SEQSIZE);
    return 0;
 }
