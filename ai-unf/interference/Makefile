@@ -33,8 +33,8 @@ PPC=cilly
 #T=svc16_sigma_false-unreach-call
 #T=svc16_stateful01_true-unreach-call
 #T=atgc-count
-T=threadpool
-#T=sorting
+#T=threadpool
+T=sorting
 #T=findmax
 
 S=atgc-count.c findmax.c threadpool.c robots.c sorting.c $(wildcard svc16_*.c)
