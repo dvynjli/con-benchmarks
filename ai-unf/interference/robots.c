@@ -126,17 +126,12 @@ int main ()
      pthread_mutex_unlock (&ms[tid]);
    }
 
-   // join (loops unfolded)
-#ifdef VERIFIER_HAVE_PTHREAD_JOIN
-   for (i = 0; i< NUM_ROBOTS; i++)
-      pthread_join (ths[i], NULL);
-#else
+   // join (loop unfolded)
    i = 0;
-   pthread_join (ths[i++], NULL);
-   pthread_join (ths[i++], NULL);
+   pthread_join (ths[i], NULL); i++;
+   pthread_join (ths[i], NULL); i++;
    //@ assert (i == NUM_ROBOTS);
    __VERIFIER_assert (i == NUM_ROBOTS);
-#endif
    return 0;
 }
 
