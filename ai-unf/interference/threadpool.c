@@ -1,5 +1,5 @@
-#include "verifier-framac.h"
-//#include "verifier-none.h"
+//#include "verifier-framac.h"
+#include "verifier-none.h"
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
@@ -7,9 +7,6 @@ pthread_mutex_t mut;
 int control = 0; /* 0 / 1 / 2 == no request / request to work / work finished */
 int arg;
 int result;
-
-pthread_mutex_t mutexdone;
-int donecount = 0;
 
 void spinlock_cas (int *var, pthread_mutex_t *mutex, int cmp, int set)
 {
@@ -102,12 +99,10 @@ void *thread (void *arg_)
 int main ()
 {
    pthread_t t;
-   int myres;
+   int i, myres;
 
    // initialize shared variables and create the thread
    pthread_mutex_init (&mut, NULL);
-   pthread_mutex_init (&mutexdone, NULL);
-   donecount = 0;
    control = 0;
    pthread_create (&t, NULL, thread, NULL);
 
@@ -156,12 +151,6 @@ int main ()
    __VERIFIER_assert (control == 1);
 
    // join
-#ifdef VERIFIER_HAVE_PTHREAD_JOIN
    pthread_join (t, NULL);
-#else
-   pthread_mutex_lock (&mutexdone);
-   if (donecount != 1) return 0;
-   pthread_mutex_unlock (&mutexdone);
-#endif
    return 0;
 }

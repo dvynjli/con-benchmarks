@@ -59,6 +59,5 @@ int main()
   pthread_join(t3, 0);
 
   pthread_mutex_destroy(&mutex);
-  
   return 0;
 }

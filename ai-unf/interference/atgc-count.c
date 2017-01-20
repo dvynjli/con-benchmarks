@@ -3,7 +3,7 @@
 //#include "verifier-poet.h"
 //#include "verifier-astrea.h"
 
-#define NUM_THREADS 1
+#define NUM_THREADS 2
 #define ELEM_PER_THREAD 3 
 
 #define SEQSIZE (NUM_THREADS * ELEM_PER_THREAD)
@@ -98,8 +98,9 @@ int main ()
    //@ assert (i == NUM_THREADS);
 #else
    pthread_mutex_lock (&mutexdone);
-   if (donecount != NUM_THREADS) return 0;
+   i = donecount;
    pthread_mutex_unlock (&mutexdone);
+   if (i != NUM_THREADS) return 0;
 #endif
 
    // merge the results
