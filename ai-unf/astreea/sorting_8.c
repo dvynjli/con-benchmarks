@@ -162,7 +162,7 @@ void *main_continuation (void *arg)
    __VERIFIER_assert (th_id == NUM_THREADS);
 
    // check that the correct number of threads has terminated 
-   //@ assert (k >= NUM_THREADS);
+   //@ assert (k == NUM_THREADS);
    __VERIFIER_assert (k == NUM_THREADS);
 
    // merge the sorted arrays (we should merge here, instead of sorting again!!)
