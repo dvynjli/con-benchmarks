@@ -58,6 +58,7 @@ int work (int arg_)
    //@ assert (arg_ < 1024);
    __VERIFIER_assert (arg_ < 1024);
 
+   
    if (last_bit_is_set (arg_)) count++;
    if (arg_ >= 1) {
     arg_ /= 2;
@@ -156,8 +157,7 @@ int main ()
    myres = work (arg);
    printf ("m: result %d myres %d\n", result, myres);
    //@ assert (result == myres);
-   __VERIFIER_assert (result >= 0 && result <= 10);
-   __VERIFIER_assert (myres >= 0 && myres <= 10);
+   __VERIFIER_assert (result == myres);
    //@ assert (control == 0);
    __VERIFIER_assert (control == 0);
 
@@ -172,8 +172,7 @@ int main ()
    myres = work (arg);
    printf ("m: result %d myres %d\n", result, myres);
    //@ assert (result == myres);
-   __VERIFIER_assert (result >= 0 && result <= 10);
-   __VERIFIER_assert (myres >= 0 && myres <= 10);
+   __VERIFIER_assert (result == myres);
    //@ assert (control == 0);
    __VERIFIER_assert (control == 0);
    
@@ -182,8 +181,8 @@ int main ()
    arg = 1234;
    spinlock_inc (&control, &mut);
 
-   //@ assert (control == 1 || control == 2);
-   __VERIFIER_assert (control == 1 || control == 2);
+   //@ assert (control == 1);
+   __VERIFIER_assert (control == 1);
 
    // join
    pthread_join (t, NULL);

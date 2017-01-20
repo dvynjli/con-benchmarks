@@ -3,7 +3,7 @@
 //#include "verifier-poet.h"
 #include "verifier-astreea.h"
 
-#define NUM_THREADS 2
+#define NUM_THREADS 8
 #define MAX_ITEMS 30
 
 int source[MAX_ITEMS];
@@ -106,6 +106,12 @@ int main ()
    i++;
    ITER
    ITER
+   ITER
+   ITER
+   ITER
+   ITER
+   ITER
+   ITER
 #undef ITER
    //@ assert (i == NUM_THREADS);
    __VERIFIER_assert (i == NUM_THREADS);
@@ -126,6 +132,12 @@ int main ()
      if (channel[i]) k++; \
      pthread_mutex_unlock (&ms[i]); \
      i++;
+     ITER
+     ITER
+     ITER
+     ITER
+     ITER
+     ITER
      ITER
      ITER
 #undef ITER
