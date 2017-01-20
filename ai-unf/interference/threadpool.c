@@ -60,31 +60,31 @@ int work (int arg_)
 
    
    if (last_bit_is_set (arg_)) count++;
-   if (arg_ == 1) {
+   if (arg_ >= 1) {
     arg_ /= 2;
     if (last_bit_is_set (arg_)) count++;
-    if (arg_ == 1) {
+    if (arg_ >= 1) {
      arg_ /= 2;
      if (last_bit_is_set (arg_)) count++;
-     if (arg_ == 1) {
+     if (arg_ >= 1) {
       arg_ /= 2;
       if (last_bit_is_set (arg_)) count++;
-      if (arg_ == 1) {
+      if (arg_ >= 1) {
        arg_ /= 2;
        if (last_bit_is_set (arg_)) count++;
-       if (arg_ == 1) {
+       if (arg_ >= 1) {
         arg_ /= 2;
         if (last_bit_is_set (arg_)) count++;
-        if (arg_ == 1) {
+        if (arg_ >= 1) {
          arg_ /= 2;
          if (last_bit_is_set (arg_)) count++;
-         if (arg_ == 1) {
+         if (arg_ >= 1) {
           arg_ /= 2;
           if (last_bit_is_set (arg_)) count++;
-          if (arg_ == 1) {
+          if (arg_ >= 1) {
            arg_ /= 2;
            if (last_bit_is_set (arg_)) count++;
-           if (arg_ == 1) {
+           if (arg_ >= 1) {
             arg_ /= 2;
             if (last_bit_is_set (arg_)) count++;
             arg_ /= 2; // otherwise assertion below will fail
