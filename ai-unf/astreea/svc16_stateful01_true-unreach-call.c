@@ -47,11 +47,12 @@ void * thread2(void * arg)
   return 0;
 }
 
+void *main_continuation (void *arg);
+pthread_t t1, t2;
+
 int main()
 {
-  pthread_t t1, t2;
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
-  int i;
   pthread_mutex_init(&ja, 0);
   pthread_mutex_init(&jb, 0);
   join1 = join2 = 0;
@@ -64,24 +65,34 @@ int main()
 
   pthread_create(&t1, 0, thread1, 0);
   pthread_create(&t2, 0, thread2, 0);
-  
+
+  pthread_t tt;
+  pthread_create (&tt, NULL, main_continuation, NULL);
+  pthread_join (tt, NULL);
+  return 0;
+}
+
+void *main_continuation (void *arg)
+{
 #ifdef VERIFIER_HAVE_PTHREAD_JOIN
   pthread_join(t1, 0);
   pthread_join(t2, 0);
 #else
+  int i;
   pthread_mutex_lock (&ja);
   i = join1;
   pthread_mutex_unlock (&ja);
-  if (! i) return 0;
+  if (i == 0) return 0;
   pthread_mutex_lock (&jb);
   i = join2;
   pthread_mutex_unlock (&jb);
-  if (! i) return 0;
+  if (i == 0) return 0;
 #endif
 
+  //@ assert (data1 == 16);
   __VERIFIER_assert (data1 == 16);
+  //@ assert (data2 == 5);
   __VERIFIER_assert (data2 == 5);
 
   return 0;
 }
-
