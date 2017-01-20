@@ -112,18 +112,20 @@ int main ()
    {
      // choose a random robot that still works
      tid = __VERIFIER_nondet_int (0, NUM_ROBOTS - 1);
-     if (out_channel[tid] == 0) continue;
-     printf ("m: picking tid %d out[tid] %d\n", tid, out_channel[tid]);
+     if (out_channel[tid] != 0)
+     { 
+       printf ("m: picking tid %d out[tid] %d\n", tid, out_channel[tid]);
 
-     // recharge the battery or stop it
-     pthread_mutex_lock (&ms[tid]);
-     out_channel[tid] = __VERIFIER_nondet_int (0, MAX_RECHARGE);
-     printf ("m: charging tid %d out[tid] %d\n", tid, out_channel[tid]);
-     if (out_channel[tid] == 0)
-     {
-       k++;
+       // recharge the battery or stop it
+       pthread_mutex_lock (&ms[tid]);
+       out_channel[tid] = __VERIFIER_nondet_int (0, MAX_RECHARGE);
+       printf ("m: charging tid %d out[tid] %d\n", tid, out_channel[tid]);
+       if (out_channel[tid] == 0)
+       {
+         k++;
+       }
+       pthread_mutex_unlock (&ms[tid]);
      }
-     pthread_mutex_unlock (&ms[tid]);
    }
 
    // join (loop unfolded)

@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-astreea.h"
+#include "verifier-poet.h"
+//#include "verifier-astreea.h"
 
 #define SIGMA 4
 
