@@ -19,7 +19,7 @@ endif
 
 # normal compilation
 CPPFLAGS=
-CFLAGS=-Wall -pthread
+CFLAGS=-Wall -pthread -g
 CC=clang
 LDLIBS=
 
@@ -32,7 +32,8 @@ PPC=cilly
 #T=svc16_lazy01_false-unreach-call
 #T=svc16_sigma_false-unreach-call
 #T=svc16_stateful01_true-unreach-call
-T=atgc-count
+#T=atgc-count
+T=threadpool
 #T=sorting
 #T=findmax
 
