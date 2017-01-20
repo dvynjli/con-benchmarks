@@ -31,7 +31,8 @@ int main()
    pthread_create(&t[i], 0, thread, 0); i++; // last time don't increment array_index
    //@ assert (i == SIGMA);
    __VERIFIER_assert (i == SIGMA);
-#undef ITER
+   //@ assert (array_index < SIGMA);
+   __VERIFIER_assert (array_index < SIGMA);
 
    pthread_t tt;
    pthread_create(&tt, 0, main_continuation, 0);

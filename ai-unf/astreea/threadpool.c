@@ -58,7 +58,6 @@ int work (int arg_)
    //@ assert (arg_ < 1024);
    __VERIFIER_assert (arg_ < 1024);
 
-   
    if (last_bit_is_set (arg_)) count++;
    if (arg_ >= 1) {
     arg_ /= 2;
