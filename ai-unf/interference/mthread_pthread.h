@@ -21,7 +21,8 @@ void      pthread_exit(void *thread_return);
 pthread_t pthread_self(void);
 
 
-int    pthread_mutex_init (pthread_mutex_t * mutex , pthread_mutexattr_t * attr );
+int    pthread_mutex_init (pthread_mutex_t * restrict mutex ,
+                           const pthread_mutexattr_t * restrict attr );
 int    pthread_mutex_lock (pthread_mutex_t * mutex );
 int    pthread_mutex_unlock (pthread_mutex_t * mutex );
 

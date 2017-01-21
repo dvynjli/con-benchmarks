@@ -52,7 +52,7 @@ void pthread_exit(void *thread_return) {
 extern volatile int NON_DET_JOIN;
 // Overapproximated return code for the function and the joined threads
 int pthread_join(pthread_t thread, void **retval) {
-  if (retval) *retval = NON_DET_JOIN;
+  if (retval) *retval = (void*) (long) NON_DET_JOIN;
   return NON_DET_JOIN ? -1 : 0;
 }
 

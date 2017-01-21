@@ -54,8 +54,8 @@ void *thread (void *arg)
    result[id] = count;
    pthread_mutex_unlock (&mutexres);
 
+   // signal my join
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
-   // signal my 
    pthread_mutex_lock (&joinmutex[id]);
    join[id] = 1;
    pthread_mutex_unlock (&joinmutex[id]);
@@ -131,6 +131,8 @@ int main ()
      return 0;
    }
 #undef ITER
+   //@ assert (i == NUM_THREADS);
+   __VERIFIER_assert (i == NUM_THREADS);
 #endif
 
    // aggregate results

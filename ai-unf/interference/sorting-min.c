@@ -73,8 +73,7 @@ void *sort_thread (void * arg)
    __VERIFIER_assert (min >= 0);
    __VERIFIER_assert (min <= max);
 
-   // 
-   int val = findmin (min, max);
+   //int val = findmin (min, max);
    int _val = 0;
 
    while (min < max)
@@ -102,7 +101,7 @@ int main ()
    int i;
    for (i = 0; i < MAX_ITEMS; i++)
    {
-      source[i] = __VERIFIER_nondet_int() % 20;
+      source[i] = __VERIFIER_nondet_int (0, 20);
       printf ("source[%d] = %d\n", i, source[i]);
       __VERIFIER_assert (source[i] >= 0);
    }
@@ -144,14 +143,8 @@ int main ()
    // main will join the results
    // this method should be optimized
    // but it is just simulating computation
-   sort (0, MAX_ITEMS);
+   //sort (0, MAX_ITEMS);
  
-#if 1
-   // this code prints the sorted array
-   printf ("==============\n");
-   for (i = 0; i < MAX_ITEMS; i++)
-      printf ("sorted[%d] = %d\n", i, sorted[i]);
-#endif
    return 0;
 }
 

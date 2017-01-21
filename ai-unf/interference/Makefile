@@ -18,7 +18,7 @@ endif
 #LDLIBS=$(POET_LDLIBS_C)
 
 # normal compilation
-CPPFLAGS=
+CPPFLAGS=-I .
 CFLAGS=-Wall -pthread -g
 CC=clang
 LDLIBS=
@@ -37,10 +37,11 @@ T=svc16_stateful01_true-unreach-call
 #T=sorting
 #T=findmax
 
-S=atgc-count.c findmax.c threadpool.c robots.c sorting.c $(wildcard svc16_*.c)
+S=$(wildcard *.c)
 O=$(S:.c=)
+X=$(S:.c=.o)
 
-all : $O
+all : $X
 	./$T
 
 clean :
