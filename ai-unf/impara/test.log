@@ -1,0 +1,50 @@
+impara test.c --property main.assertion.1 --property main.assertion.2
+
+Parsing test.c
+Converting
+Type-checking test
+Generating GOTO Program
+Adding CPROVER library
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 7 of 19 functions (12 used)
+size of a node 176
+Building location map
+Starting search
+Locs:    195
+Threads: 4
+Nodes:   86036
+States:  2829
+Cover checks: 
+ * ordinary 2775 / 328999
+ * force    1128 / 31815
+Number of uncoverings 0
+Refinements: 
+ * nr  6552
+Cover checks
+ solver time 0s #runs 0
+
+Force-cover checks
+ solver time 8.847s #runs 508
+ * clauses: total 3631145 avg 7147.92 max 14072
+ * vars: total 1145768 avg 2255.45 max 3878
+
+Assertion checks 72
+ solver time 0s #runs 0
+
+Symex checks
+ solver time 0.87s #runs 200
+ * clauses: total 219992 avg 1099.96 max 1429
+ * vars: total 212930 avg 1064.65 max 1233
+
+
+Runtime: 103.6s total 
+  Symex 1.184 s 
+  Close 3.221 s 
+  Force 16.411 s 
+  Domain 5.716 s
+
+[main.assertion.1] assertion i>= 0: OK
+[main.assertion.2] assertion i<= 10: OK
+VERIFICATION SUCCESSFUL
