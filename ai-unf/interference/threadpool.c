@@ -155,8 +155,9 @@ int main ()
    // check result
    myres = work (arg);
    printf ("m: result %d myres %d\n", result, myres);
-   //@ assert (result == myres);
+   //@ assert (result >= 0 && result <= 10);
    __VERIFIER_assert (result >= 0 && result <= 10);
+   //@ assert (myres >= 0 && myres <= 10);
    __VERIFIER_assert (myres >= 0 && myres <= 10);
    //@ assert (control == 0);
    __VERIFIER_assert (control == 0);
@@ -171,8 +172,9 @@ int main ()
    // check result
    myres = work (arg);
    printf ("m: result %d myres %d\n", result, myres);
-   //@ assert (result == myres);
+   //@ assert (result >= 0 && result <= 10);
    __VERIFIER_assert (result >= 0 && result <= 10);
+   //@ assert  (myres >= 0 && myres <= 10);
    __VERIFIER_assert (myres >= 0 && myres <= 10);
    //@ assert (control == 0);
    __VERIFIER_assert (control == 0);

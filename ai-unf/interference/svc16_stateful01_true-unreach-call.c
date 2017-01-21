@@ -79,9 +79,10 @@ int main()
   if (i == 0) return 0;
 #endif
 
+  //@ assert (data1 == 16);
   __VERIFIER_assert (data1 == 16);
+  //@ assert (data2 == 5);
   __VERIFIER_assert (data2 == 5);
 
   return 0;
 }
-

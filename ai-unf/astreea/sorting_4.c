@@ -68,9 +68,11 @@ void *sort_thread (void * arg)
    return NULL;
 }
 
+void *main_continuation (void *arg);
+pthread_t t[NUM_THREADS];
+
 int main ()
 {
-   pthread_t ths[NUM_THREADS];
    int i;
 
    __libc_init_poet ();
@@ -102,7 +104,7 @@ int main ()
    maxBound[i] = j + delta -1; \
    j += delta; \
    pthread_mutex_init (&ms[i], NULL); \
-   pthread_create (&ths[i], NULL, sort_thread, NULL); \
+   pthread_create (&t[i], NULL, sort_thread, NULL); \
    i++;
    ITER
    ITER
@@ -112,8 +114,18 @@ int main ()
    //@ assert (i == NUM_THREADS);
    __VERIFIER_assert (i == NUM_THREADS);
 
+   pthread_t tt;
+   pthread_create (&tt, NULL, main_continuation, NULL);
+   pthread_join (tt, NULL);
+   return 0;
+}
+
+void *main_continuation (void *arg)
+{
+   int i, k;
+
    // wait for all the threads to finish the sorting
-   int k = 0;
+   k = 0;
    while (k < NUM_THREADS)
    {
      // check if any thread finished (unfolded loop)
@@ -121,7 +133,7 @@ int main ()
      // The loop should terminate only after ALL thread have finished, but it
      // can terminate after only ONE thread terminates, as it can increase k
      // multiple times using the channel bit of that thread. As a result the
-     // asswertions below can be violated
+     // assertions below can be violated
      i = 0;
 #define ITER \
      pthread_mutex_lock (&ms[i]); \
@@ -142,14 +154,8 @@ int main ()
    __VERIFIER_assert (th_id == NUM_THREADS);
 
    // check that the correct number of threads has terminated 
-   //@ assert (k >= NUM_THREADS);
-   __VERIFIER_assert (k >= NUM_THREADS);
-
-   // join
-   for (i = 0; i < NUM_THREADS; i++) 
-   { 
-     pthread_join (ths[i], NULL);
-   }
+   //@ assert (k == NUM_THREADS);
+   __VERIFIER_assert (k == NUM_THREADS);
 
    // merge the sorted arrays (we should merge here, instead of sorting again!!)
    sort (0, MAX_ITEMS);
@@ -158,5 +164,14 @@ int main ()
    printf ("==============\n");
    for (i = 0; i < MAX_ITEMS; i++)
       printf ("m: sorted[%d] = %d\n", i, source[i]);
-   return 0;
+
+   // join (all threads must have exited by now, due to the loop above, so if
+   // the verifier does not support join, that won't impact the precission)
+   i = 0;
+   pthread_join (t[i], NULL); i++;
+   pthread_join (t[i], NULL); i++;
+   //@ assert (i == NUM_THREADS);
+   __VERIFIER_assert (i == NUM_THREADS);
+
+   return NULL;
 }

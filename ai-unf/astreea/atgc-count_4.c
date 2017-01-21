@@ -54,8 +54,8 @@ void *thread (void *arg)
    result[id] = count;
    pthread_mutex_unlock (&mutexres);
 
+   // signal my join
 #ifndef VERIFIER_HAVE_PTHREAD_JOIN
-   // signal my 
    pthread_mutex_lock (&joinmutex[id]);
    join[id] = 1;
    pthread_mutex_unlock (&joinmutex[id]);
@@ -63,11 +63,12 @@ void *thread (void *arg)
    return NULL;
 }
 
+void *main_continuation (void *arg);
+pthread_t t[NUM_THREADS];
+
 int main ()
 {
    int i;
-   pthread_t t[NUM_THREADS];
-   int count;
 
    // __libc_init_poet ();
 
@@ -105,6 +106,18 @@ int main ()
    //@ assert (i == NUM_THREADS);
    __VERIFIER_assert (i == NUM_THREADS);
 
+   pthread_t tt;
+   pthread_create (&tt, NULL, main_continuation, NULL);
+   pthread_join (tt, NULL);
+   
+   return 0;
+}
+
+void *main_continuation (void *arg)
+{
+   int i, count;
+
+   printf ("mm: hello\n");
    // wait for all threads to finish
 #ifdef VERIFIER_HAVE_PTHREAD_JOIN
    i = 0;
@@ -133,6 +146,8 @@ int main ()
      return 0;
    }
 #undef ITER
+   //@ assert (i == NUM_THREADS);
+   __VERIFIER_assert (i == NUM_THREADS);
 #endif
 
    // aggregate results
@@ -149,5 +164,5 @@ int main ()
 
    //@ assert (count <= SEQSIZE);
    __VERIFIER_assert (count <= SEQSIZE);
-   return 0;
+   return NULL;
 }
