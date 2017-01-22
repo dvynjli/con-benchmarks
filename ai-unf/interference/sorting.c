@@ -76,13 +76,11 @@ int main ()
    __libc_init_poet ();
 
    // this code initializes the source array with random numbers
-   for (i = 0; i < MAX_ITEMS; i++)
-   {
-      source[i] = __VERIFIER_nondet_int (0, 20);
-      printf ("m: source[%d] = %d\n", i, source[i]);
-      //@ assert (source[i] >= 0);
-      __VERIFIER_assert (source[i] >= 0);
-   }
+   i = __VERIFIER_nondet_int (0, MAX_ITEMS - 1);
+   source[i] = __VERIFIER_nondet_int (0, 20);
+
+   //@ assert (source[i] >= 0);
+   __VERIFIER_assert (source[i] >= 0);
 
    // init shared variables
    pthread_mutex_init (&mid, NULL);

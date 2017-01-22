@@ -34,8 +34,8 @@ void *thread3(void *arg)
   printf ("t3: data %d\n", data);
   //@ assert (MIN <= data);
   __VERIFIER_assert (MIN <= data);
-  //@ assert (data < MAX + 3);
-  __VERIFIER_assert (data < MAX + 3);
+  //@ assert (data <= MAX + 3);
+  __VERIFIER_assert (data <= MAX + 3);
   pthread_mutex_unlock(&mutex);    
   return 0;
 }

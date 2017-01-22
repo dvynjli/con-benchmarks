@@ -34,8 +34,9 @@ PPC=cilly
 #T=svc16_stateful01_true-unreach-call
 #T=atgc-count
 #T=threadpool
-T=sorting
+T=sorting_4
 #T=findmax
+#T=findmax_5q_8i
 
 S=$(wildcard *.c)
 O=$(S:.c=)

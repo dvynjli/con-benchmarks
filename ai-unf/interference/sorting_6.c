@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-astreea.h"
+#include "verifier-poet.h"
+//#include "verifier-astreea.h"
 
 #define NUM_THREADS 6
 #define MAX_ITEMS 30
@@ -127,7 +127,7 @@ int main ()
      i = 0;
 #define ITER \
      pthread_mutex_lock (&ms[i]); \
-     if (channel[i]) k++; \
+     if (channel[i] == 1) { k++; } \
      pthread_mutex_unlock (&ms[i]); \
      i++;
      ITER
