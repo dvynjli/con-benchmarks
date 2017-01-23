@@ -1,0 +1,8 @@
+poet (findmax_3q_3i-poet, cutoff=y):
+total number of events of the unfolding: 85
+total number of maximal configurations: 9
+total number of cutoffs: 11
+average size of U at maximal configurations: 54
+explore end
+0.56user 0.00system 0:00.57elapsed 99%CPU (0avgtext+0avgdata 9932maxresident)k
+8inputs+24outputs (0major+4030minor)pagefaults 0swaps

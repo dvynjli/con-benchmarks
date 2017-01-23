@@ -1,0 +1,80 @@
+poet (atgc-count_3, cutoff=n):
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+__VERIFIER_error: position = 100
+total number of events of the unfolding: 432
+total number of maximal configurations: 36
+total number of cutoffs: 0
+average size of U at maximal configurations: 230
+explore end
+5.89user 0.04system 0:05.93elapsed 99%CPU (0avgtext+0avgdata 18216maxresident)k
+0inputs+16outputs (0major+6106minor)pagefaults 0swaps

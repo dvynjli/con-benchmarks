@@ -1,0 +1,12 @@
+poet (svc16_lazy01_false-unreach-call, cutoff=n):
+__VERIFIER_error: position = 23
+__VERIFIER_error: position = 23
+__VERIFIER_error: position = 23
+__VERIFIER_error: position = 23
+total number of events of the unfolding: 72
+total number of maximal configurations: 6
+total number of cutoffs: 0
+average size of U at maximal configurations: 45
+explore end
+0.01user 0.01system 0:00.02elapsed 109%CPU (0avgtext+0avgdata 6060maxresident)k
+0inputs+16outputs (0major+2999minor)pagefaults 0swaps
