@@ -1,8 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
 //#include "verifier-poet.h"
-#include "verifier-impara.h"
-//#include "verifier-astreea.h"
+#include "verifier-astreea.h"
 
 #define SIGMA 4
 
@@ -19,9 +18,12 @@ void *thread(void * arg)
    return 0;
 }
 
+void *main_continuation (void *arg);
+pthread_t t[SIGMA];
+
 int main()
 {
-   int i, sum;
+   int i;
    pthread_t t[SIGMA];
    pthread_mutex_init(&mutex, 0);
 
@@ -40,6 +42,16 @@ int main()
    __VERIFIER_assert (i == SIGMA);
    //@ assert (array_index < SIGMA);
    __VERIFIER_assert (array_index < SIGMA);
+
+   pthread_t tt;
+   pthread_create(&tt, 0, main_continuation, 0);
+   pthread_join (tt, 0);
+   return 0;
+}
+
+void *main_continuation (void *arg)
+{
+   int i, sum;
 
    // join (on this benchmark, unlike the others, there is no good way to do a
    // join using only critical sections because here we don't need to distribute
@@ -62,9 +74,10 @@ int main()
    //@ assert (i == SIGMA);
    __VERIFIER_assert (i == SIGMA);
 
+   // the original assertion was sum == SIGMA, which does not hold
    printf ("m: sum %d SIGMA %d\n", sum, SIGMA);
-   //@ assert (sum == SIGMA);
-   __VERIFIER_assert (sum == SIGMA);
+   //@ assert (sum <= SIGMA);
+   __VERIFIER_assert (sum <= SIGMA);
 
    return 0;
 }
