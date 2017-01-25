@@ -17,47 +17,6 @@ Dropping 9 of 23 functions (14 used)
 size of a node 176
 Building location map
 Starting search
-Locs:    284
-Threads: 1
-Nodes:   422
-States:  38
-Cover checks: 
- * ordinary 0 / 120
- * force    21 / 52
-Number of uncoverings 0
-Refinements: 
- * nr  39
-Cover checks
- solver time 0s #runs 0
-
-Force-cover checks
- solver time 0.372s #runs 49
- * clauses: total 200045 avg 4082.55 max 6510
- * vars: total 73040 avg 1490.61 max 2252
-
-Assertion checks 6
- solver time 0.032s #runs 6
- * clauses: total 17434 avg 2905.67 max 5619
- * vars: total 8614 avg 1435.67 max 2619
-
-Symex checks
- solver time 0.059s #runs 12
- * clauses: total 26054 avg 2171.17 max 4635
- * vars: total 13028 avg 1085.67 max 2211
-
-
-Runtime: 0.562s total 
-  Symex 0.008 s 
-  Close 0 s 
-  Force 0.417 s 
-  Domain 0.036 s
-
-maximal number of unwindings 5
-[__VERIFIER_assert.assertion.1] assertion expr: OK
-[pthread_mutex_unlock.assertion.1] must hold lock upon unlock: OK: NOT REACHED
-[pthread_mutex_unlock.assertion.2] must hold lock upon unlock: OK: NOT REACHED
-
-** 0 failed, 2 not reached of total 3 properties
-VERIFICATION SUCCESSFUL
-0.92user 0.05system 0:00.97elapsed 99%CPU (0avgtext+0avgdata 30564maxresident)k
-0inputs+32outputs (0major+17710minor)pagefaults 0swaps
+Command terminated by signal 9
+871.22user 3.05system 14:45.52elapsed 98%CPU (0avgtext+0avgdata 3662960maxresident)k
+43776inputs+40outputs (144major+925476minor)pagefaults 0swaps
