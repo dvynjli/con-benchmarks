@@ -1,0 +1,19 @@
+impara (findmax_5q_3i):
+Parsing findmax_5q_3i.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking findmax_5q_3i
+file findmax_5q_3i.c line 24 function queue_insert: function `printf' is not declared
+file findmax_5q_3i.c line 147 function main: function `__libc_init_poet' is not declared
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 9 of 23 functions (14 used)
+size of a node 176
+Building location map
+Starting search

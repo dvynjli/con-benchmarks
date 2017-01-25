@@ -1,5 +1,33 @@
 poet (tpoll-poet, cutoff=y):
-poet: tpoll-poet.c: copyFile: does not exist (No such file or directory)
-Command exited with non-zero status 1
-0.00user 0.00system 0:00.00elapsed 100%CPU (0avgtext+0avgdata 3232maxresident)k
-0inputs+0outputs (0major+906minor)pagefaults 0swaps
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+__VERIFIER_error: position = 77
+total number of events of the unfolding: 141
+total number of maximal configurations: 14
+total number of cutoffs: 7
+average size of U at maximal configurations: 83
+explore end
+1.26user 0.04system 0:01.31elapsed 99%CPU (0avgtext+0avgdata 14112maxresident)k
+1096inputs+32outputs (5major+5072minor)pagefaults 0swaps

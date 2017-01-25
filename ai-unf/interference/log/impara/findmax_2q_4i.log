@@ -1,0 +1,63 @@
+impara (findmax_2q_4i):
+Parsing findmax_2q_4i.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking findmax_2q_4i
+file findmax_2q_4i.c line 24 function queue_insert: function `printf' is not declared
+file findmax_2q_4i.c line 147 function main: function `__libc_init_poet' is not declared
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 9 of 23 functions (14 used)
+size of a node 176
+Building location map
+Starting search
+Locs:    284
+Threads: 2
+Nodes:   10218
+States:  706
+Cover checks: 
+ * ordinary 867 / 56401
+ * force    545 / 6239
+Number of uncoverings 0
+Refinements: 
+ * nr  1348
+Cover checks
+ solver time 0s #runs 0
+
+Force-cover checks
+ solver time 4.307s #runs 542
+ * clauses: total 1903707 avg 3512.37 max 5672
+ * vars: total 644842 avg 1189.75 max 1766
+
+Assertion checks 396
+ solver time 0.012s #runs 4
+ * clauses: total 6492 avg 1623 max 2851
+ * vars: total 2932 avg 733 max 1235
+
+Symex checks
+ solver time 0.044s #runs 12
+ * clauses: total 18300 avg 1525 max 2922
+ * vars: total 8316 avg 693 max 1307
+
+
+Runtime: 9.48s total 
+  Symex 0.185 s 
+  Close 0.414 s 
+  Force 5.401 s 
+  Domain 0.837 s
+
+maximal number of unwindings 5
+[__VERIFIER_assert.assertion.1] assertion expr: OK
+[pthread_mutex_unlock.assertion.1] must hold lock upon unlock: OK: NOT REACHED
+[pthread_mutex_unlock.assertion.2] must hold lock upon unlock: OK
+
+** 0 failed, 1 not reached of total 3 properties
+VERIFICATION SUCCESSFUL
+9.86user 0.07system 0:09.95elapsed 99%CPU (0avgtext+0avgdata 34176maxresident)k
+0inputs+40outputs (0major+18228minor)pagefaults 0swaps

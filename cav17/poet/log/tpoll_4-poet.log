@@ -1,5 +1,10 @@
 poet (tpoll_4-poet, cutoff=y):
-poet: tpoll_4-poet.c: copyFile: does not exist (No such file or directory)
-Command exited with non-zero status 1
-0.00user 0.00system 0:00.00elapsed 125%CPU (0avgtext+0avgdata 3240maxresident)k
-0inputs+0outputs (0major+907minor)pagefaults 0swaps
+__VERIFIER_error: position = 101
+__VERIFIER_error: position = 105
+total number of events of the unfolding: 33018
+total number of maximal configurations: 3085
+total number of cutoffs: 1762
+average size of U at maximal configurations: 16775
+explore end
+1027.13user 5.35system 17:13.00elapsed 99%CPU (0avgtext+0avgdata 1984332maxresident)k
+16inputs+1072outputs (0major+497646minor)pagefaults 0swaps
