@@ -1,0 +1,10 @@
+poet (tpoll_4-poet, cutoff=y):
+__VERIFIER_error: position = 101
+__VERIFIER_error: position = 105
+total number of events of the unfolding: 33018
+total number of maximal configurations: 3085
+total number of cutoffs: 1762
+average size of U at maximal configurations: 16775
+explore end
+1027.13user 5.35system 17:13.00elapsed 99%CPU (0avgtext+0avgdata 1984332maxresident)k
+16inputs+1072outputs (0major+497646minor)pagefaults 0swaps

@@ -76,8 +76,8 @@ void *main_continuation (void *arg)
 
    // the original assertion was sum == SIGMA, which does not hold
    printf ("m: sum %d SIGMA %d\n", sum, SIGMA);
-   //@ assert (sum <= SIGMA);
-   __VERIFIER_assert (sum <= SIGMA);
+   //@ assert (sum == SIGMA);
+   __VERIFIER_assert (sum == SIGMA);
 
    return 0;
 }

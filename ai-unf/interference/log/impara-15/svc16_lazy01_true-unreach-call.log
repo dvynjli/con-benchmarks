@@ -1,0 +1,63 @@
+impara (svc16_lazy01_true-unreach-call):
+Parsing svc16_lazy01_true-unreach-call.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking svc16_lazy01_true-unreach-call
+file svc16_lazy01_true-unreach-call.c line 17 function thread1: function `printf' is not declared
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 9 of 18 functions (9 used)
+size of a node 176
+Building location map
+Starting search
+Locs:    359
+Threads: 4
+Nodes:   188002
+States:  10289
+Cover checks: 
+ * ordinary 1449236 / 3913879
+ * force    1629 / 114997
+Number of uncoverings 0
+Refinements: 
+ * nr  32168
+Cover checks
+ solver time 0s #runs 0
+
+Force-cover checks
+ solver time 0.699s #runs 243
+ * clauses: total 378205 avg 1556.4 max 15381
+ * vars: total 215968 avg 888.757 max 4209
+
+Assertion checks 3228
+ solver time 0.416s #runs 108
+ * clauses: total 138888 avg 1286 max 1599
+ * vars: total 85194 avg 788.833 max 913
+
+Symex checks
+ solver time 0.798s #runs 192
+ * clauses: total 228358 avg 1189.36 max 1749
+ * vars: total 147730 avg 769.427 max 989
+
+
+Runtime: 2792.69s total 
+  Symex 6.825 s 
+  Close 62.507 s 
+  Force 13.773 s 
+  Domain 29.403 s
+
+[pthread_mutex_destroy.assertion.1] lock held upon destroy: OK
+[__VERIFIER_assert.assertion.1] assertion expr: OK
+[pthread_mutex_unlock.assertion.1] must hold lock upon unlock: OK
+[pthread_mutex_unlock.assertion.2] must hold lock upon unlock: OK
+[pthread_mutex_unlock.assertion.3] must hold lock upon unlock: OK
+
+** 0 failed, 0 not reached of total 5 properties
+VERIFICATION SUCCESSFUL
+2790.66user 2.03system 46:33.86elapsed 99%CPU (0avgtext+0avgdata 394824maxresident)k
+0inputs+40outputs (0major+99918minor)pagefaults 0swaps

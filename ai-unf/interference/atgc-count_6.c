@@ -1,7 +1,8 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
 //#include "verifier-poet.h"
-#include "verifier-astreea.h"
+#include "verifier-impara.h"
+//#include "verifier-astreea.h"
 
 #define NUM_THREADS 6
 #define ELEM_PER_THREAD 30
@@ -110,6 +111,10 @@ int main ()
    // wait for all threads to finish
 #ifdef VERIFIER_HAVE_PTHREAD_JOIN
    i = 0;
+   pthread_join (t[i], NULL); i++;
+   pthread_join (t[i], NULL); i++;
+   pthread_join (t[i], NULL); i++;
+   pthread_join (t[i], NULL); i++;
    pthread_join (t[i], NULL); i++;
    pthread_join (t[i], NULL); i++;
    //@ assert (i == NUM_THREADS);

@@ -1,6 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-#include "verifier-poet.h"
+//#include "verifier-poet.h"
+#include "verifier-impara.h"
 //#include "verifier-astreea.h"
 
 #define NUM_THREADS 2
@@ -76,11 +77,8 @@ int main ()
    // T = 1
    // G = 2
    // C = 3
-   for (i = 0; i < SEQSIZE; i++)
-   {
-      sequence[i] = __VERIFIER_nondet_int (0, 3);
-      printf ("m: init i %d seq %d\n", i, sequence[i]);
-   }
+   i = __VERIFIER_nondet_int (0, SEQSIZE-1);
+   sequence[i] = __VERIFIER_nondet_int (0, 3);
 
    // non-deterministically choose a nucleotide to count
    target = __VERIFIER_nondet_int (0, 3);

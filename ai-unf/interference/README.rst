@@ -1,3 +1,4 @@
+This directory contains the benchmarks used in the CAV 2017 submission.
 
 findmax
 =======
@@ -38,3 +39,25 @@ threadpool
 - The thread then increments the control variable, setting it to 2
 - The main thread waits until the control variable is equal to 2 to read the
   results and assert that they are correct.
+
+sorting
+=======
+
+- Buggy implementation a map-reduce like sorting algorithm.
+
+svc16_lazy01_false-unreach-call
+===============================
+
+- SV COMP benchmark adapted for a data non-deterministic analysis.
+- 
+
+svc16_sigma_false-unreach-call
+===============================
+
+- SV COMP benchmark 
+ 
+svc16_stateful01_true-unreach-call
+===============================
+
+- SV COMP benchmark 
+ 

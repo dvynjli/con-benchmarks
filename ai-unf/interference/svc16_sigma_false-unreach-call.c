@@ -1,6 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-#include "verifier-poet.h"
+//#include "verifier-poet.h"
+#include "verifier-impara.h"
 //#include "verifier-astreea.h"
 
 #define SIGMA 4
@@ -61,10 +62,9 @@ int main()
    //@ assert (i == SIGMA);
    __VERIFIER_assert (i == SIGMA);
 
-   // the original assertion was sum == SIGMA, which does not hold
    printf ("m: sum %d SIGMA %d\n", sum, SIGMA);
-   //@ assert (sum <= SIGMA);
-   __VERIFIER_assert (sum <= SIGMA);
+   //@ assert (sum == SIGMA);
+   __VERIFIER_assert (sum == SIGMA);
 
    return 0;
 }
