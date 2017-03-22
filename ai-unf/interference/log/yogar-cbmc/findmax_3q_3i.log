@@ -1,0 +1,64 @@
+yogar-cbmc (findmax_3q_3i):
+This product includes software developed by Daniel Kroening, Edmund Clarke, 
+Computer Science Department, University of Oxford 
+Computer Science Department, Carnegie Mellon University
+CBMC version 4.9 64-bit linux
+file findmax_3q_3i.c: Parsing
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+Converting
+Type-checking findmax_3q_3i
+file findmax_3q_3i.c line 24 function queue_insert: function `c::printf' is not declared
+file findmax_3q_3i.c line 147 function main: function `c::__libc_init_poet' is not declared
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Starting Bounded Model Checking
+--unwind 2
+Unwinding loop c::main.0 iteration 1 (2 max) file findmax_3q_3i.c line 150 function main thread 0
+Not unwinding loop c::main.0 iteration 2 (2 max) file findmax_3q_3i.c line 150 function main thread 0
+Unwinding loop c::queue_extract.0 iteration 1 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.0 iteration 2 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Unwinding loop c::queue_extract.1 iteration 1 (2 max) file findmax_3q_3i.c line 45 function queue_extract thread 0
+Unwinding loop c::queue_extract.0 iteration 1 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.0 iteration 2 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.1 iteration 2 (2 max) file findmax_3q_3i.c line 45 function queue_extract thread 0
+Unwinding loop c::consumer.0 iteration 1 (2 max) file findmax_3q_3i.c line 114 function consumer thread 0
+Unwinding loop c::queue_extract.0 iteration 1 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.0 iteration 2 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Unwinding loop c::queue_extract.1 iteration 1 (2 max) file findmax_3q_3i.c line 45 function queue_extract thread 0
+Unwinding loop c::queue_extract.0 iteration 1 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.0 iteration 2 (2 max) file findmax_3q_3i.c line 55 function queue_extract thread 0
+Not unwinding loop c::queue_extract.1 iteration 2 (2 max) file findmax_3q_3i.c line 45 function queue_extract thread 0
+Not unwinding loop c::consumer.0 iteration 2 (2 max) file findmax_3q_3i.c line 114 function consumer thread 0
+Unwinding loop c::findmaxidx.0 iteration 1 (2 max) file findmax_3q_3i.c line 76 function findmaxidx thread 1
+Not unwinding loop c::findmaxidx.0 iteration 2 (2 max) file findmax_3q_3i.c line 76 function findmaxidx thread 1
+Adding SC constraints
+Shared c::q: 24R/13W
+Shared c::qsiz: 24R/6W
+Shared c::source: 4R/3W
+Shared c::sorted: 4R/3W
+reads num: 56
+writes num: 25
+488 steps
+488 steps
+574 steps
+size of program expression: 574 steps
+no slicing due to threads
+Generated 10 VCC(s), 10 remaining after simplification
+36 =======
+num = 0
+Passing problem to propositional reduction
+Running propositional reduction
+Post-processing
+Solving with MiniSAT 2.2.0 with simplifier
+7872 variables, 23552 clauses
+SAT checker: negated claim is UNSATISFIABLE, i.e., holds
+Runtime decision procedure: 0.019s
+VERIFICATION SUCCESSFUL
+0.49user 0.04system 0:00.53elapsed 99%CPU (0avgtext+0avgdata 32976maxresident)k
+0inputs+24outputs (0major+18416minor)pagefaults 0swaps

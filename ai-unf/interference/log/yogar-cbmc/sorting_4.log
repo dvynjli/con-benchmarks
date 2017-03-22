@@ -1,0 +1,16 @@
+yogar-cbmc (sorting_4):
+This product includes software developed by Daniel Kroening, Edmund Clarke, 
+Computer Science Department, University of Oxford 
+Computer Science Department, Carnegie Mellon University
+CBMC version 4.9 64-bit linux
+file sorting_4.c: Parsing
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+Converting
+Type-checking sorting_4
+file sorting_4.c line 62 function sort_thread: function `c::printf' is not declared
+file sorting_4.c line 77 function main: function `c::__libc_init_poet' is not declared
+Generating GOTO Program
+Command terminated by signal 11
+0.18user 0.03system 0:00.42elapsed 50%CPU (0avgtext+0avgdata 29464maxresident)k
+0inputs+8outputs (0major+9250minor)pagefaults 0swaps

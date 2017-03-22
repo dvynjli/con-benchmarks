@@ -1,0 +1,459 @@
+yogar-cbmc (threadpool):
+This product includes software developed by Daniel Kroening, Edmund Clarke, 
+Computer Science Department, University of Oxford 
+Computer Science Department, Carnegie Mellon University
+CBMC version 4.9 64-bit linux
+file threadpool.c: Parsing
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+Converting
+Type-checking threadpool
+file threadpool.c line 23 function spinlock_cas: function `c::printf' is not declared
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Starting Bounded Model Checking
+--unwind 2
+Unwinding loop c::spinlock_cas.0 iteration 1 (2 max) file threadpool.c line 18 function spinlock_cas thread 0
+Not unwinding loop c::spinlock_cas.0 iteration 2 (2 max) file threadpool.c line 18 function spinlock_cas thread 0
+Unwinding loop c::spinlock_cas.0 iteration 1 (2 max) file threadpool.c line 18 function spinlock_cas thread 0
+Not unwinding loop c::spinlock_cas.0 iteration 2 (2 max) file threadpool.c line 18 function spinlock_cas thread 0
+Unwinding loop c::spinlock_cas.0 iteration 1 (2 max) file threadpool.c line 18 function spinlock_cas thread 1
+Not unwinding loop c::spinlock_cas.0 iteration 2 (2 max) file threadpool.c line 18 function spinlock_cas thread 1
+Unwinding loop c::thread.0 iteration 1 (2 max) file threadpool.c line 112 function thread thread 1
+Unwinding loop c::spinlock_cas.0 iteration 1 (2 max) file threadpool.c line 18 function spinlock_cas thread 1
+Not unwinding loop c::spinlock_cas.0 iteration 2 (2 max) file threadpool.c line 18 function spinlock_cas thread 1
+Not unwinding loop c::thread.0 iteration 2 (2 max) file threadpool.c line 112 function thread thread 1
+Adding SC constraints
+Shared c::__CPROVER_threads_exited: 2R/2W
+Shared c::__CPROVER_next_thread_id: 1R/2W
+Shared c::control: 32R/15W
+Shared c::arg: 6R/4W
+Shared c::result: 6R/3W
+reads num: 47
+writes num: 26
+1556 steps
+1556 steps
+1826 steps
+size of program expression: 1826 steps
+no slicing due to threads
+Generated 24 VCC(s), 24 remaining after simplification
+242 =======
+num = 1096
+Passing problem to propositional reduction
+Running propositional reduction
+Post-processing
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236469 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.275s
+add rf time = 0s
+clear time  = 0.001s
+================= Refine 0 =================
+cycle number = 17
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236470 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.016s
+add rf time = 0s
+clear time  = 0.001s
+================= Refine 1 =================
+cycle number = 62
+constraint.size = 8
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236476 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.018s
+add rf time = 0.001s
+clear time  = 0.002s
+================= Refine 2 =================
+cycle number = 29
+constraint.size = 8
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236482 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.021s
+add rf time = 0.001s
+clear time  = 0.002s
+================= Refine 3 =================
+cycle number = 29
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236484 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.02s
+add rf time = 0.001s
+clear time  = 0.002s
+================= Refine 4 =================
+cycle number = 57
+constraint.size = 16
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236499 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.042s
+add rf time = 0.001s
+clear time  = 0.003s
+================= Refine 5 =================
+cycle number = 10
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236501 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.022s
+add rf time = 0.001s
+clear time  = 0.003s
+================= Refine 6 =================
+cycle number = 48
+constraint.size = 7
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236508 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.024s
+add rf time = 0.001s
+clear time  = 0.003s
+================= Refine 7 =================
+cycle number = 40
+constraint.size = 5
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236512 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.02s
+add rf time = 0.003s
+clear time  = 0.003s
+================= Refine 8 =================
+cycle number = 25
+constraint.size = 9
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236520 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.021s
+add rf time = 0.003s
+clear time  = 0.003s
+================= Refine 9 =================
+cycle number = 33
+constraint.size = 6
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236526 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.014s
+add rf time = 0.003s
+clear time  = 0.003s
+================= Refine 10 =================
+cycle number = 14
+constraint.size = 2
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236527 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.015s
+add rf time = 0.004s
+clear time  = 0.003s
+================= Refine 11 =================
+cycle number = 13
+constraint.size = 1
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236527 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.025s
+add rf time = 0.004s
+clear time  = 0.003s
+================= Refine 12 =================
+cycle number = 59
+constraint.size = 5
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236530 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.023s
+add rf time = 0.004s
+clear time  = 0.005s
+================= Refine 13 =================
+cycle number = 25
+constraint.size = 6
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236536 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.024s
+add rf time = 0.006s
+clear time  = 0.005s
+================= Refine 14 =================
+cycle number = 38
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236539 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.023s
+add rf time = 0.007s
+clear time  = 0.006s
+================= Refine 15 =================
+cycle number = 22
+constraint.size = 2
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236541 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.019s
+add rf time = 0.009s
+clear time  = 0.007s
+================= Refine 16 =================
+cycle number = 12
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236542 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.019s
+add rf time = 0.01s
+clear time  = 0.008s
+================= Refine 17 =================
+cycle number = 50
+constraint.size = 9
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236550 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.02s
+add rf time = 0.011s
+clear time  = 0.008s
+================= Refine 18 =================
+cycle number = 186
+constraint.size = 7
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236557 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.022s
+add rf time = 0.011s
+clear time  = 0.008s
+================= Refine 19 =================
+cycle number = 35
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236559 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.023s
+add rf time = 0.011s
+clear time  = 0.008s
+================= Refine 20 =================
+cycle number = 21
+constraint.size = 4
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236563 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.023s
+add rf time = 0.012s
+clear time  = 0.008s
+================= Refine 21 =================
+cycle number = 61
+constraint.size = 5
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236568 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.018s
+add rf time = 0.012s
+clear time  = 0.008s
+================= Refine 22 =================
+cycle number = 34
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236571 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.019s
+add rf time = 0.012s
+clear time  = 0.009s
+================= Refine 23 =================
+cycle number = 38
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236573 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.015s
+add rf time = 0.012s
+clear time  = 0.01s
+================= Refine 24 =================
+cycle number = 16
+constraint.size = 1
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236573 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.015s
+add rf time = 0.012s
+clear time  = 0.01s
+================= Refine 25 =================
+cycle number = 145
+constraint.size = 1
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236573 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.014s
+add rf time = 0.012s
+clear time  = 0.01s
+================= Refine 26 =================
+cycle number = 25
+constraint.size = 4
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236577 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.016s
+add rf time = 0.012s
+clear time  = 0.01s
+================= Refine 27 =================
+cycle number = 19
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236580 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.014s
+add rf time = 0.012s
+clear time  = 0.01s
+================= Refine 28 =================
+cycle number = 36
+constraint.size = 2
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236582 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.018s
+add rf time = 0.012s
+clear time  = 0.011s
+================= Refine 29 =================
+cycle number = 10
+constraint.size = 2
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236582 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.016s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 30 =================
+cycle number = 41
+constraint.size = 18
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236600 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.014s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 31 =================
+cycle number = 30
+constraint.size = 9
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236609 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.018s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 32 =================
+cycle number = 21
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236612 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.017s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 33 =================
+cycle number = 28
+constraint.size = 1
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236612 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.015s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 34 =================
+cycle number = 22
+constraint.size = 4
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236616 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.019s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 35 =================
+cycle number = 33
+constraint.size = 4
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236619 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.301s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 36 =================
+cycle number = 11
+constraint.size = 2
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236620 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.045s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 37 =================
+cycle number = 24
+constraint.size = 5
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236625 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.028s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 38 =================
+cycle number = 401
+constraint.size = 1
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236625 clauses
+SAT checker: negated claim is SATISFIABLE, i.e., does not hold
+Runtime decision procedure: 0.031s
+add rf time = 0.013s
+clear time  = 0.011s
+================= Refine 39 =================
+cycle number = 24
+constraint.size = 3
+Running propositional reduction
+Solving with MiniSAT 2.2.0 with simplifier
+66947 variables, 236628 clauses
+SAT checker: negated claim is UNSATISFIABLE, i.e., holds
+Runtime decision procedure: 1.8s
+VERIFICATION SUCCESSFUL
+########## build eog time: 0.073 s#######
+########## compute constraint time: 0.005 s#######
+########## SAT Solving time: 3.165 s#######
+4.04user 0.07system 0:04.12elapsed 99%CPU (0avgtext+0avgdata 47052maxresident)k
+0inputs+48outputs (0major+21993minor)pagefaults 0swaps
