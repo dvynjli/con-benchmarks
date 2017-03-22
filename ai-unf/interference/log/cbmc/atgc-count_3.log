@@ -1,124 +1,68 @@
 cbmc (atgc-count_3):
-CBMC version 5.4 64-bit x86_64 linux
+CBMC version 5.6 64-bit x86_64 linux
 Parsing atgc-count_3.c
 file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
-file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+<built-in>: note: this is the location of the previous definition
 Converting
 Type-checking atgc-count_3
 file atgc-count_3.c line 51 function thread: function `printf' is not declared
 Generating GOTO Program
 Adding CPROVER library (x86_64)
 file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
-file <command-line> line 0: <built-in>: note: this is the location of the previous definition
-Function Pointer Removal
+<built-in>: note: this is the location of the previous definition
+Removal of function pointers and virtual functions
 Partial Inlining
 Generic Property Instrumentation
 Starting Bounded Model Checking
 **** WARNING: no body for function nondet
-Unwinding loop main.0 iteration 1 file atgc-count_3.c line 90 function main thread 0
-Unwinding loop main.0 iteration 2 file atgc-count_3.c line 90 function main thread 0
-Unwinding loop main.0 iteration 3 file atgc-count_3.c line 90 function main thread 0
-Unwinding loop main.1 iteration 1 file atgc-count_3.c line 139 function main thread 0
-Unwinding loop main.1 iteration 2 file atgc-count_3.c line 139 function main thread 0
-Unwinding loop main.1 iteration 3 file atgc-count_3.c line 139 function main thread 0
-Unwinding loop thread.0 iteration 1 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 2 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 3 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 4 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 5 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 6 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 7 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 8 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 9 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 10 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 11 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 12 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 13 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 14 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 15 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 16 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 17 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 18 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 19 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 20 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 21 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 22 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 23 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 24 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 25 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 26 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 27 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 28 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 29 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 30 file atgc-count_3.c line 40 function thread thread 1
-Unwinding loop thread.0 iteration 1 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 2 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 3 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 4 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 5 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 6 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 7 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 8 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 9 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 10 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 11 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 12 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 13 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 14 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 15 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 16 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 17 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 18 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 19 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 20 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 21 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 22 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 23 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 24 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 25 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 26 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 27 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 28 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 29 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 30 file atgc-count_3.c line 40 function thread thread 2
-Unwinding loop thread.0 iteration 1 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 2 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 3 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 4 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 5 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 6 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 7 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 8 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 9 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 10 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 11 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 12 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 13 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 14 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 15 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 16 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 17 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 18 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 19 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 20 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 21 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 22 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 23 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 24 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 25 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 26 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 27 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 28 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 29 file atgc-count_3.c line 40 function thread thread 3
-Unwinding loop thread.0 iteration 30 file atgc-count_3.c line 40 function thread thread 3
+Unwinding loop main.0 iteration 1 (5 max) file atgc-count_3.c line 90 function main thread 0
+Unwinding loop main.0 iteration 2 (5 max) file atgc-count_3.c line 90 function main thread 0
+Unwinding loop main.0 iteration 3 (5 max) file atgc-count_3.c line 90 function main thread 0
+Unwinding loop main.1 iteration 1 (5 max) file atgc-count_3.c line 139 function main thread 0
+Unwinding loop main.1 iteration 2 (5 max) file atgc-count_3.c line 139 function main thread 0
+Unwinding loop main.1 iteration 3 (5 max) file atgc-count_3.c line 139 function main thread 0
+Unwinding loop thread.0 iteration 1 (5 max) file atgc-count_3.c line 40 function thread thread 1
+Unwinding loop thread.0 iteration 2 (5 max) file atgc-count_3.c line 40 function thread thread 1
+Unwinding loop thread.0 iteration 3 (5 max) file atgc-count_3.c line 40 function thread thread 1
+Unwinding loop thread.0 iteration 4 (5 max) file atgc-count_3.c line 40 function thread thread 1
+Not unwinding loop thread.0 iteration 5 (5 max) file atgc-count_3.c line 40 function thread thread 1
+Unwinding loop thread.0 iteration 1 (5 max) file atgc-count_3.c line 40 function thread thread 2
+Unwinding loop thread.0 iteration 2 (5 max) file atgc-count_3.c line 40 function thread thread 2
+Unwinding loop thread.0 iteration 3 (5 max) file atgc-count_3.c line 40 function thread thread 2
+Unwinding loop thread.0 iteration 4 (5 max) file atgc-count_3.c line 40 function thread thread 2
+Not unwinding loop thread.0 iteration 5 (5 max) file atgc-count_3.c line 40 function thread thread 2
+Unwinding loop thread.0 iteration 1 (5 max) file atgc-count_3.c line 40 function thread thread 3
+Unwinding loop thread.0 iteration 2 (5 max) file atgc-count_3.c line 40 function thread thread 3
+Unwinding loop thread.0 iteration 3 (5 max) file atgc-count_3.c line 40 function thread thread 3
+Unwinding loop thread.0 iteration 4 (5 max) file atgc-count_3.c line 40 function thread thread 3
+Not unwinding loop thread.0 iteration 5 (5 max) file atgc-count_3.c line 40 function thread thread 3
 Adding SC constraints
-size of program expression: 4357 steps
+Shared __CPROVER_threads_exited: 3R/1W
+Shared __CPROVER_next_thread_id: 14R/4W
+Shared mutexid: 6R/8W
+Shared idcount: 6R/4W
+Shared result: 6R/4W
+Shared target: 3R/2W
+Shared sequence: 15R/2W
+size of program expression: 1790 steps
 no slicing due to threads
-Generated 16 VCC(s), 14 remaining after simplification
+Generated 13 VCC(s), 11 remaining after simplification
 Passing problem to propositional reduction
 converting SSA
 Running propositional reduction
 Post-processing
 Solving with MiniSAT 2.2.1 with simplifier
-898501 variables, 3386204 clauses
-./run.sh: line 7: 13292 Terminated              timeout 30m time ./cbmc atgc-count_3.c --mm sc
+164381 variables, 623603 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime decision procedure: 6.089s
+
+** Results:
+[] must hold lock upon unlock: SUCCESS
+[thread.assertion.1] must hold lock upon unlock: SUCCESS
+[thread.assertion.2] must hold lock upon unlock: SUCCESS
+[__VERIFIER_assert.assertion.1] assertion expr: SUCCESS
+
+** 0 of 4 failed (1 iteration)
+VERIFICATION SUCCESSFUL
+6.51user 0.17system 0:06.69elapsed 99%CPU (0avgtext+0avgdata 97920maxresident)k
+0inputs+32outputs (0major+32599minor)pagefaults 0swaps

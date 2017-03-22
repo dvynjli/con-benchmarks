@@ -1,8 +1,8 @@
 cbmc (findmax_2q_4i):
-CBMC version 5.4 64-bit x86_64 linux
+CBMC version 5.6 64-bit x86_64 linux
 Parsing findmax_2q_4i.c
 file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
-file <command-line> line 0: <built-in>: note: this is the location of the previous definition
+<built-in>: note: this is the location of the previous definition
 Converting
 Type-checking findmax_2q_4i
 file findmax_2q_4i.c line 24 function queue_insert: function `printf' is not declared
@@ -10,8 +10,8 @@ file findmax_2q_4i.c line 147 function main: function `__libc_init_poet' is not 
 Generating GOTO Program
 Adding CPROVER library (x86_64)
 file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
-file <command-line> line 0: <built-in>: note: this is the location of the previous definition
-Function Pointer Removal
+<built-in>: note: this is the location of the previous definition
+Removal of function pointers and virtual functions
 Partial Inlining
 Generic Property Instrumentation
 Starting Bounded Model Checking
@@ -182,3 +182,10 @@ Unwinding loop queue_insert.0 iteration 4 (5 max) file findmax_2q_4i.c line 25 f
 Not unwinding loop queue_insert.0 iteration 5 (5 max) file findmax_2q_4i.c line 25 function queue_insert thread 1
 Unwinding loop producer.0 iteration 4 (5 max) file findmax_2q_4i.c line 97 function producer thread 1
 Adding SC constraints
+Shared __CPROVER_threads_exited: 2R/2W
+Shared __CPROVER_next_thread_id: 2R/2W
+Shared q: 260R/141W
+Shared qsiz: 260R/42W
+Shared mq: 80R/82W
+Shared source: 40R/9W
+Shared sorted: 8R/5W
