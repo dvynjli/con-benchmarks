@@ -129,15 +129,25 @@ void *thread (void *arg_)
    return NULL;
 }
 
+void *main_continuation (void *arg);
+pthread_t t;
+
 int main ()
 {
-   pthread_t t;
-   int myres;
-
    // initialize shared variables and create the thread
    pthread_mutex_init (&mut, NULL);
    control = 0;
    pthread_create (&t, NULL, thread, NULL);
+
+   pthread_t tt;
+   pthread_create (&tt, NULL, main_continuation, NULL);
+   pthread_join (tt, NULL);
+   return 0;
+}
+
+void *main_continuation (void *arg_)
+{
+   int myres;
 
    printf ("m: thread created, control %d\n", control);
 
@@ -189,5 +199,5 @@ int main ()
 
    // join
    pthread_join (t, NULL);
-   return 0;
+   return NULL;
 }
