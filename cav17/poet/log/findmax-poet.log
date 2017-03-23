@@ -1,8 +1,0 @@
-poet (findmax-poet, cutoff=y):
-total number of events of the unfolding: 100
-total number of maximal configurations: 11
-total number of cutoffs: 15
-average size of U at maximal configurations: 62
-explore end
-0.66user 0.01system 0:00.68elapsed 100%CPU (0avgtext+0avgdata 9932maxresident)k
-0inputs+24outputs (0major+4032minor)pagefaults 0swaps

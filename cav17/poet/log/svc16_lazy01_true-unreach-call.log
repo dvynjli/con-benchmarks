@@ -1,8 +1,0 @@
-poet (svc16_lazy01_true-unreach-call, cutoff=n):
-total number of events of the unfolding: 72
-total number of maximal configurations: 6
-total number of cutoffs: 0
-average size of U at maximal configurations: 45
-explore end
-0.01user 0.00system 0:00.02elapsed 95%CPU (0avgtext+0avgdata 5980maxresident)k
-0inputs+16outputs (0major+2977minor)pagefaults 0swaps
