@@ -1,7 +1,10 @@
+// Based on SV-COMP 17 benchmark
+// https://github.com/sosy-lab/sv-benchmarks/blob/master/c/pthread-ext/29_conditionals_vs_true-unreach-call.c
+
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-impara.h"
+#include "verifier-poet.h"
+//#include "verifier-impara.h"
 //#include "verifier-astreea.h"
 
 #define NUM_THREADS 5
