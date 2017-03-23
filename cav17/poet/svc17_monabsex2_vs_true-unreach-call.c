@@ -1,7 +1,10 @@
+// Based on SV-COMP 17 benchmark
+// https://github.com/sosy-lab/sv-benchmarks/blob/master/c/pthread-ext/46_monabsex2_vs_true-unreach-call.c 
+
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-impara.h"
+#include "verifier-poet.h"
+//#include "verifier-impara.h"
 //#include "verifier-astreea.h"
 
 #define NUM_THREADS 5
@@ -10,40 +13,26 @@
 
 pthread_mutex_t m; 
 
+int s = 0;
+int l = 0;
+
 void* thr1(void* arg)
 {
-  int x;
-  int y;
-  int z;
-  
-  x = __VERIFIER_nondet_int(MIN, MAX);
-  y = __VERIFIER_nondet_int(MIN, MAX);
-  
   pthread_mutex_lock (&m);
-  if(x == y)
-  {
-    z = 0;
-  } else {
-    z = 1;
-  }
-
-  printf ("thr1: x=%d, y=%d, z=%d\n", x,y,z);
-  
-  if(z == 0)
-  {
-    __VERIFIER_assert (x == y);
-  } else {
-    __VERIFIER_assert (x != y);
-  }
+  __VERIFIER_assert (l==0 || s==1);
+  s = 1; // changed from s = s || 1
+  l = 1; // overapproximates
   pthread_mutex_unlock (&m);
-  
+
   return NULL;
 }
 
 int main()
 {
-   pthread_t t[NUM_THREADS];
-   pthread_mutex_init (&m, NULL);
+  // added this initialization
+  s = __VERIFIER_nondet_int(MIN, MAX);
+  pthread_t t[NUM_THREADS];
+  pthread_mutex_init (&m, NULL);
 
    // Unfolded loop
    int i = 0;
@@ -62,6 +51,6 @@ int main()
    pthread_join (t[i], NULL); 
 #endif
 
-   return 0;
+  return 0;
 }
 
