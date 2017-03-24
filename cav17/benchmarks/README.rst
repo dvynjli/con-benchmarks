@@ -25,8 +25,8 @@ SVCOMP:
 - Some analyzers do not support the use ``pthread_join(3)``, we often removed
   them (and updated the benchmark to perform the same task).
 
-The remaining benchmarks are models (4 different families) come from real-world
-concurrent programs:
+The remaining benchmarks (4 different families) are models coming from
+real-world concurrent programs:
 
 - ``atgc.c``:
   uses ``NUM_THREADS`` threads to count the number of nucleotides in a
