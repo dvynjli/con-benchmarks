@@ -4,5 +4,5 @@ total number of cutoffs: 0
 average size of U at maximal configurations: 3612
 1 warnings: fromList [104]
 explore end
-133.37user 1.02system 2:14.63elapsed 99%CPU (0avgtext+0avgdata 295712maxresident)k
-0inputs+24outputs (0major+75478minor)pagefaults 0swaps
+132.08user 0.93system 2:13.07elapsed 99%CPU (0avgtext+0avgdata 295712maxresident)k
+0inputs+24outputs (0major+75480minor)pagefaults 0swaps

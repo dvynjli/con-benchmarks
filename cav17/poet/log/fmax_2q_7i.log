@@ -1,0 +1,8 @@
+total number of events of the unfolding: 3709
+total number of maximal configurations: 399
+total number of cutoffs: 769
+average size of U at maximal configurations: 1883
+0 warnings: fromList []
+explore end
+146.19user 0.71system 2:26.97elapsed 99%CPU (0avgtext+0avgdata 278212maxresident)k
+0inputs+32outputs (0major+71107minor)pagefaults 0swaps
