@@ -1,7 +1,7 @@
 //#include "verifier-framac.h"
 //#include "verifier-none.h"
-//#include "verifier-poet.h"
-#include "verifier-impara.h"
+#include "verifier-poet.h"
+//#include "verifier-impara.h"
 //#include "verifier-astreea.h"
 
 pthread_mutex_t mut;
