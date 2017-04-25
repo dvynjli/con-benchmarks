@@ -31,7 +31,7 @@ real-world concurrent programs:
 - ``atgc.c``:
   uses ``NUM_THREADS`` threads to count the number of nucleotides in a
   non-deterministically choosen DNA sequence.
-- ``findmax.c``:
+- ``fmax.c``:
   a producer threads non-deterministically allocates ``MAX_ITEMS`` numbers, and send
   them, in decreasing numeric order, to a consumer.
 - ``thpool.c``:
