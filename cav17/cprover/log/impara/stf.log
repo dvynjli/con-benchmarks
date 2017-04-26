@@ -1,0 +1,57 @@
+Parsing stf.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking stf
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 9 of 15 functions (6 used)
+size of a node 176
+Building location map
+Starting search
+Locs:    305
+Threads: 3
+Nodes:   7799
+States:  250
+Cover checks: 
+ * ordinary 2607 / 22253
+ * force    191 / 3773
+Number of uncoverings 0
+Refinements: 
+ * nr  1083
+Cover checks
+ solver time 0s #runs 0
+
+Force-cover checks
+ solver time 0.049s #runs 13
+ * clauses: total 24617 avg 1893.62 max 3484
+ * vars: total 13089 avg 1006.85 max 1419
+
+Assertion checks 92
+ solver time 0s #runs 0
+
+Symex checks
+ solver time 0s #runs 0
+
+
+Runtime: 5.548s total 
+  Symex 0.128 s 
+  Close 0.184 s 
+  Force 0.503 s 
+  Domain 0.573 s
+
+[__VERIFIER_assert.assertion.1] assertion expr: OK
+[pthread_mutex_unlock.assertion.1] must hold lock upon unlock: OK
+[pthread_mutex_unlock.assertion.2] must hold lock upon unlock: OK
+[pthread_mutex_unlock.assertion.3] must hold lock upon unlock: OK
+[pthread_mutex_unlock.assertion.4] must hold lock upon unlock: OK
+
+** 0 failed, 0 not reached of total 5 properties
+VERIFICATION SUCCESSFUL
+5.93user 0.06system 0:06.01elapsed 99%CPU (0avgtext+0avgdata 33088maxresident)k
+8inputs+40outputs (0major+18005minor)pagefaults 0swaps

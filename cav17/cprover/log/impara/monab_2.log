@@ -1,0 +1,16 @@
+Parsing monab_2.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking monab_2
+Generating GOTO Program
+Adding CPROVER library
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Function Pointer Removal
+Partial Inlining
+Generic Property Instrumentation
+Dropping 6 of 13 functions (7 used)
+size of a node 176
+Building location map
+Starting search

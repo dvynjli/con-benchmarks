@@ -1,0 +1,46 @@
+CBMC version 5.6 64-bit x86_64 linux
+Parsing sigma_true.c
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Converting
+Type-checking sigma_true
+file sigma_true.c line 62 function main: function `printf' is not declared
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+file <command-line> line 0: <command-line>:0:0: warning: "__STDC_VERSION__" redefined
+<built-in>: note: this is the location of the previous definition
+Removal of function pointers and virtual functions
+Partial Inlining
+Generic Property Instrumentation
+Starting Bounded Model Checking
+Adding SC constraints
+Shared array: 8R/5W
+Shared __CPROVER_threads_exited: 8R/5W
+Shared __CPROVER_next_thread_id: 23R/5W
+Shared array_index: 9R/4W
+Shared mutex: 16R/18W
+size of program expression: 6040 steps
+no slicing due to threads
+Generated 13 VCC(s), 10 remaining after simplification
+Passing problem to propositional reduction
+converting SSA
+Running propositional reduction
+Post-processing
+Solving with MiniSAT 2.2.1 with simplifier
+110079 variables, 498531 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime decision procedure: 188.019s
+
+** Results:
+[] must hold lock upon unlock: SUCCESS
+[main.assertion.1] must hold lock upon unlock: SUCCESS
+[main.assertion.2] must hold lock upon unlock: SUCCESS
+[main.assertion.3] must hold lock upon unlock: SUCCESS
+[main.assertion.4] must hold lock upon unlock: SUCCESS
+[thread.assertion.1] must hold lock upon unlock: SUCCESS
+[__VERIFIER_assert.assertion.1] assertion expr: SUCCESS
+
+** 0 of 7 failed (1 iteration)
+VERIFICATION SUCCESSFUL
+189.09user 0.22system 3:09.34elapsed 99%CPU (0avgtext+0avgdata 163428maxresident)k
+0inputs+48outputs (0major+33569minor)pagefaults 0swaps
